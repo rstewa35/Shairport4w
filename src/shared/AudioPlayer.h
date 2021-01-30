@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "Mmsystem.h"
 #include "myQueue.h"
 
 class 	CWavePlayThread;

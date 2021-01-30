@@ -5,6 +5,10 @@
  */
 
 #include "StdAfx.h"
+
+#include "myCrypt.h"
+#include "utils.h"
+#include "HairTunes.h"
 #include "ExtOptsDlg.h"
 #include "AudioPlayer.h"
 

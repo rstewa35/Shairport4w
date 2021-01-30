@@ -5,9 +5,8 @@
  */
 
 #include "stdafx.h"
-#include <Strsafe.h>
-#include <ATLComTime.h>
 
+#include "Config.h"
 #include "utils.h"
 #include "myCrypt.h"
 

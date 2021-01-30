@@ -1,12 +1,13 @@
+
+
 #include "stdafx.h"
-#include <mmsystem.h>
-#include <mmreg.h>
-#include <Mmdeviceapi.h>
-#include <FunctionDiscoveryKeys_devpkey.h>
 
-#include "AudioPlayer.h"
+
 #include "utils.h"
-
+#include "Config.h"
+#include "myCrypt.h"
+#include "HairTunes.h"
+#include "AudioPlayer.h"
 
 #pragma comment(lib, "Winmm.lib")
 

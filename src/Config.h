@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include <time.h>
-
 #define NUM_CHANNELS	2
 #define	SAMPLE_SIZE		16
 #define	SAMPLE_FACTOR	(NUM_CHANNELS * (SAMPLE_SIZE >> 3))

@@ -3,10 +3,9 @@
  *  Networking.h
  *
  */
+
 #pragma once
 
-#include <in6addr.h>
-#include <ws2ipdef.h>
 
 #include "myMutex.h"
 #include "myThread.h"

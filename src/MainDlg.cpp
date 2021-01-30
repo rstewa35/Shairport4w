@@ -3,18 +3,37 @@
  *  MainDlg.cpp 
  *
  */
+
 #include "stdafx.h"
 #include "resource.h"
 
+#include "utils.h"
+#include "myCrypt.h"
+#include "base64.h"
+#include "Networking.h"
+#include "sp_bonjour.h"
+#include "http_parser.h"
+#include "HairTunes.h"
+#include "RaopContext.h"
+#include "RaopContextImpl.h"
+#include "Config.h"
 #include "aboutdlg.h"
 #include "MainDlg.h"
 #include "ExtOptsDlg.h"
 #include "ChangeNameDlg.h"
 
+
+bool start_serving();
+void stop_serving();
+bool is_streaming();
+
 static const	ATL::CString	c_strEmptyTimeInfo = _T("--:--");
 
 extern			BYTE			hw_addr[6];
 volatile		LONG			g_bMute = 0;
+
+#define	MUTE_FROM_TOGGLE_BUTTON		0x00000001
+#define	MUTE_FROM_EXTERN			0x00000002
 
 #define STR_EMPTY_TIME_INFO c_strEmptyTimeInfo
 #define	REPLACE_CONTROL_VERT(__ctl,___offset) 	__ctl.GetClientRect(&rect);							\

@@ -8,11 +8,21 @@
 
 #include "resource.h"
 
+#include "utils.h"
+#include "myCrypt.h"
+#include "base64.h"
+#include "Networking.h"
+#include "Bonjour/dns_sd.h"
+#include "sp_bonjour.h"
+#include "http_parser.h"
+#include "HairTunes.h"
+#include "RaopContext.h"
+#include "RaopContextImpl.h"
+#include "DmapParser.h"
+#include "Config.h"
+
 #include "aboutdlg.h"
 #include "MainDlg.h"
-#include "Bonjour/dns_sd.h"
-
-#include "DmapParser.h"
 
 typedef EXECUTION_STATE (WINAPI *_SetThreadExecutionState)(EXECUTION_STATE esFlags);
 _SetThreadExecutionState	pSetThreadExecutionState = NULL;

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <bcrypt.h>
-
 #pragma comment(lib, "Bcrypt.lib")
 
 namespace my_crypt

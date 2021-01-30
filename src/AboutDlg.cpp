@@ -5,9 +5,11 @@
  */
 
 #include "stdafx.h"
-#include "resource.h"
-#include "MyBitmapButton.h"
 
+#include "resource.h"
+
+#include "utils.h"
+#include "MyBitmapButton.h"
 #include "aboutdlg.h"
 
 

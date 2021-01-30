@@ -5,6 +5,8 @@
  */
 
 #include "stdafx.h"
+
+#include "utils.h"
 #include "MyBitmapButton.h"
 
 bool CMyBitmapButton::Resize(Bitmap& bmToResize, const CSize& szDest, HBITMAP* bmResult, COLORREF dwBkCol, bool bFillBk /* = false*/)

@@ -5,6 +5,10 @@
  */
 
 #include "StdAfx.h"
+
+#include "utils.h"
+#include "Networking.h"
+#include "sp_bonjour.h"
 #include "DacpService.h"
 
 

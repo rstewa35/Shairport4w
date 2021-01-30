@@ -6,11 +6,6 @@
 
 #pragma once
 
-#include <time.h>
-#include <atlsync.h>
-#include <comdef.h>
-#include <regex>
-
 #include "myMutex.h"
 
 #ifndef MAKEULONGLONG

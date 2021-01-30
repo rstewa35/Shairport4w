@@ -3,9 +3,6 @@
 
 #pragma once
 
-#include <string>
-#include <atlalloc.h>
-
 namespace my_Base64
 {
 

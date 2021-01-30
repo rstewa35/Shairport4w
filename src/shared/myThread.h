@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <process.h>
-#include <processthreadsapi.h>
-#include <time.h>
 
 /////////////////////////////////////////////////////////////////////////
 // CCoInitializeScope

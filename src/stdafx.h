@@ -14,14 +14,11 @@
 
 #include <sdkddkver.h>
 
+#include <time.h>
+
 #include <atlbase.h>
 #include <atlapp.h>
 
-extern	CAppModule				_Module;
-extern	volatile LONG			g_bMute;
-
-#define	MUTE_FROM_TOGGLE_BUTTON		0x00000001
-#define	MUTE_FROM_EXTERN			0x00000002
 
 #include <atlwin.h>
 
@@ -37,7 +34,12 @@ extern	volatile LONG			g_bMute;
 
 #include <atlsync.h>
 
+#include <ATLComTime.h>
+
 #include <ws2tcpip.h>
+#include <in6addr.h>
+#include <ws2ipdef.h>
+#include <IPTypes.h>
 
 #include <comdef.h>
 
@@ -51,23 +53,30 @@ extern	volatile LONG			g_bMute;
 #include <functional>
 #include <memory>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#include <regex>
+
 #include <GdiPlus.h>
 
 using namespace Gdiplus;
 
-#include <Wincodec.h>
+#include <bcrypt.h>
 
-#include "myCrypt.h"
-#include "base64.h"
-#include "Networking.h"
-#include "myMutex.h"
-#include "utils.h"
-#include "sp_bonjour.h"
-#include "http_parser.h"
-#include "HairTunes.h"
-#include "RaopContext.h"
-#include "RaopContextImpl.h"
-#include "Config.h"
+#include <Strsafe.h>
+
+#include <process.h>
+#include <processthreadsapi.h>
+
+#include <Wincodec.h>
+#include <Mmsystem.h>
+#include <mmreg.h>
+#include <Mmdeviceapi.h>
+#include <FunctionDiscoveryKeys_devpkey.h>
+
+
+extern	CAppModule				_Module;
 
 #if defined _M_IX86
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -78,9 +87,3 @@ using namespace Gdiplus;
 #else
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
-
-bool start_serving();
-void stop_serving();
-bool is_streaming();
-
-#include "resource.h"

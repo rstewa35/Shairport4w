@@ -6,6 +6,11 @@
 
 #include "stdafx.h"
 
+#include "myMutex.h"
+#include "utils.h"
+#include "Networking.h"
+#include "sp_bonjour.h"
+
 static HMODULE			hDnsSD			= NULL;
 static CMyMutex			mtxDnsSD;
 

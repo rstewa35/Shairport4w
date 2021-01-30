@@ -5,9 +5,8 @@
  */
 
 #include "stdafx.h"
+
 #include "Networking.h"
-#include <IPTypes.h>
-#include <ws2tcpip.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 

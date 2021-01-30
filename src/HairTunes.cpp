@@ -5,18 +5,23 @@
  */
 
 #include "StdAfx.h"
+
+#include "utils.h"
+#include "myCrypt.h"
+#include "http_parser.h"
 #include "HairTunes.h"
-
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include "RAOPDefs.h"
+#include "RaopContext.h"
+#include "RaopContextImpl.h"
+#include "Config.h"
 #include "alac.h"
 
 #define FRAME_BYTES		(m_nFrameSize<<2)
 #define OUTFRAME_BYTES	((m_nFrameSize+3)<<2)
 #define CONTROL_A		(1e-4)
 #define CONTROL_B		(1e-1)
+
+extern	volatile LONG			g_bMute;
 
 static LONG			c_nStartFill			= START_FILL;
 static CComVariant	c_varSoundCardID;	
