@@ -813,6 +813,15 @@ bool start_serving()
 		if (!Log("listening at least on IPv4...port %lu\n", (ULONG)ntohs(raop_v4_server.m_nPort)))
 			::MessageBoxA(NULL, "Can't log to file. Please run elevated", strConfigName.c_str(), MB_ICONERROR|MB_OK);
 	}
+
+	if (raop_v6_server.Run(raop_v4_server.m_nPort))
+	{
+		_LOG("listening on IPv6, port %lu\n", (ULONG)ntohs(raop_v6_server.m_nPort));
+	}
+	else
+	{
+		_LOG("can't listen on IPv6. Don't care!\n");
+	}
 	
 	if (!InitBonjour())
 	{
