@@ -36,3 +36,5 @@ packages
 Debug
 Release
 src/Shairport4w.vcxproj.user
+
+*.aps
