@@ -983,7 +983,10 @@ bool GetVersionInfo(PCWSTR pszFileName, LPWSTR strVersion, ULONG nBufSizeInChars
     PBYTE pVerInfo = new BYTE[cbVerInfo];
 
     if (pVerInfo == NULL)
+	{
+		FreeLibrary(hVLib);
         return false;
+	}
 
 	bool bResult = false;
 
@@ -1050,6 +1053,7 @@ bool GetVersionInfo(PCWSTR pszFileName, LPWSTR strVersion, ULONG nBufSizeInChars
 		}
     }
     delete pVerInfo;
+	FreeLibrary(hVLib);
 
 	return bResult;
 }

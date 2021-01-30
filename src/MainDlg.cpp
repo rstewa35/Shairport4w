@@ -106,6 +106,7 @@ static HRESULT MyLoadIconMetric(HINSTANCE hinst, PCWSTR pszName, int lims, __out
 		{
 			hr = pLoadIconMetric(hinst, pszName, lims, phico);
 		}
+		FreeLibrary(hMod);
 	}
 	return hr;
 }
