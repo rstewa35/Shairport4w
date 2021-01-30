@@ -100,8 +100,8 @@ IDR_MAINFRAME           ICON                    "res\\Shairport4w.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,9,4
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,9,5
+ PRODUCTVERSION 1,0,9,5
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -116,11 +116,11 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileVersion", "1.0.9.4"
+            VALUE "FileVersion", "1.0.9.5"
             VALUE "InternalName", "Shairport4w"
             VALUE "OriginalFilename", "Shairport4w.exe"
             VALUE "ProductName", "Shairport4w Module"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "ProductVersion", "1, 0, 9, 5"
         END
     END
     BLOCK "VarFileInfo"
