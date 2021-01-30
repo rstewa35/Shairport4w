@@ -13,48 +13,6 @@
 #include "aboutdlg.h"
 
 
-typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-
-static bool _IsWow64()
-{
-	LPFN_ISWOW64PROCESS fnIsWow64Process;
-
-	BOOL bIsWow64 = FALSE;
-
-	fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(::GetModuleHandleA("kernel32"),"IsWow64Process");
-
-	if (NULL != fnIsWow64Process)
-	{
-		if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
-		{
-			bIsWow64 = FALSE;
-		}
-	}
-	return bIsWow64 ? true : false;
-}
-
-static BOOL BrowseForDirectory(HWND hWnd, LPCTSTR szTitle, LPTSTR szPath, UINT uiFlag /*=0*/)
-{
-	BROWSEINFO bi;
-
-	memset(&bi, 0, sizeof(bi));
-
-	bi.hwndOwner		= hWnd;
-	bi.pidlRoot			= NULL;
-	bi.pszDisplayName	= szPath;
-	bi.lpszTitle		= szTitle;
-	bi.ulFlags			= BIF_RETURNONLYFSDIRS | uiFlag;
-	bi.lpfn				= NULL;
-	bi.lParam			= NULL;
-
-	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
-
-	if (pidl)
-		return SHGetPathFromIDList(pidl, szPath);
-	return FALSE;
-}
-
-
 LRESULT CAboutDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
 	CenterWindow(GetParent());
