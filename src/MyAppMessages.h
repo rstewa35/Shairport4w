@@ -12,4 +12,4 @@
 #define	WM_DACP_REG				(WM_APP+6)
 #define	WM_SET_MMSTATE			(WM_APP+7)
 #define	WM_SET_CONNECT_STATE	(WM_APP+8)
-#define WM_OPEN_PROJECT			(WM_APP+9)
+
