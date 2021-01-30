@@ -111,7 +111,7 @@ public:
 					}
 				}
 			}
-			delete pBuf;
+			delete [] pBuf;
 			return true;
 		}
 		return false;

@@ -202,7 +202,7 @@ int CHairTunes::AlacDecode(unsigned char* pDest, const unsigned char* pBuf, int 
     ATLASSERT(outsize <= FRAME_BYTES);
 
 	if (packet != buf)
-		delete packet;
+		delete [] packet;
 	return outsize;
 }
 

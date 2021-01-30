@@ -127,7 +127,7 @@ bool GetValueFromRegistry(HKEY hKey, PCSTR pValueName, std::string& strValue, PC
 				strValue	= (PCSTR)pBuf;
 				bResult		= true;
 			}
-			delete pBuf;
+			delete [] pBuf;
 		}
 		RegCloseKey(h);
 	}
@@ -293,7 +293,7 @@ CComVariant GetValueFromRegistry(HKEY hKey, PCWSTR pValueName, CComVariant varDe
 						{
 							ATLASSERT(FALSE);
 						}
-						delete pBuf;
+						delete [] pBuf;
 					}
 				}
 				break;
@@ -337,7 +337,7 @@ CComVariant GetValueFromRegistry(HKEY hKey, PCWSTR pValueName, CComVariant varDe
 						{
 							ATLASSERT(FALSE);
 						}
-						delete pBuf;
+						delete [] pBuf;
 					}
 				}
 				break;
@@ -436,7 +436,7 @@ bool PutValueToRegistry(HKEY hKey, PCWSTR pValueName, CComVariant varValue, PCWS
 							ATLASSERT(nRead == nLen);
 							bResult = RegSetValueExW(h, pValueName, 0, REG_BINARY, pBuf, nRead) == ERROR_SUCCESS ? true : false;
 
-							delete pBuf;
+							delete [] pBuf;
 						}
 					}
 					else
@@ -731,7 +731,7 @@ bool StringToIPAddrW(PCWSTR str, struct sockaddr_in* in, int laddr_size)
 
 				bResult = WSAStringToAddressW(pBuf, AF_INET6, NULL, (LPSOCKADDR)in, &dwSize) == 0 ? true : false;
 			}
-			delete pBuf;
+			delete [] pBuf;
 		}
 	}
 	return bResult;
@@ -1052,7 +1052,7 @@ bool GetVersionInfo(PCWSTR pszFileName, LPWSTR strVersion, ULONG nBufSizeInChars
 			}
 		}
     }
-    delete pVerInfo;
+	delete [] pVerInfo;
 	FreeLibrary(hVLib);
 
 	return bResult;
