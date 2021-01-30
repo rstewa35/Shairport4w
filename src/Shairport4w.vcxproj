@@ -337,7 +337,6 @@
     <None Include="res\skip_to_prev.png" />
     <None Include="res\skip_to_prev_disabled.png" />
     <None Include="res\skip_to_prev_pressed.png" />
-    <None Include="res\update-16.bmp" />
     <None Include="res\wmc.png" />
   </ItemGroup>
   <ItemGroup>

@@ -2011,7 +2011,3 @@ void CMainDlg::OnRefresh(UINT uMsg /*= 0*/, int nID /*= 0*/, HWND hWnd /*= NULL*
 	Invalidate();
 	SetMsgHandled(FALSE);
 }
-
-void CMainDlg::OnOnlineUpdate(UINT uMsg /*= 0*/, int nID /*= 0*/, HWND hWnd /*= NULL*/)
-{
-}

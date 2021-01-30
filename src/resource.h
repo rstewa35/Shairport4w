@@ -68,7 +68,6 @@
 #define IDB_ART_SHADOW                  247
 #define IDB_MUTE                        248
 #define IDB_MUTE_PRESSED                249
-#define IDB_UPDATE_16                   252
 #define IDD_PROGRESS                    253
 #define IDD_LIC_DIALOG                  254
 #define IDD_LIC_DIALOG1                 255

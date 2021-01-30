@@ -286,7 +286,6 @@ public:
 		COMMAND_ID_HANDLER_EX(IDC_MM_MUTE_ON,	OnMuteOnOff)
 		COMMAND_ID_HANDLER_EX(IDC_MM_MUTE_OFF,	OnMuteOnOff)
 		COMMAND_ID_HANDLER_EX(ID_REFRESH,		OnRefresh)
-		COMMAND_ID_HANDLER_EX(ID_MENU_ENTRY_ID_ONLINE_UPDATE,		OnOnlineUpdate)
 		MSG_WM_APPCOMMAND(OnAppCommand)
 		MESSAGE_HANDLER(WM_POWERBROADCAST, OnPowerBroadcast)
 
@@ -346,8 +345,6 @@ public:
 	bool OnMuteOnOff(UINT uMsg = 0, int nID = 0, HWND hWnd = NULL);
 
 	void OnRefresh(UINT uMsg = 0, int nID = 0, HWND hWnd = NULL);
-
-	void OnOnlineUpdate(UINT uMsg = 0, int nID = 0, HWND hWnd = NULL);
 
 	void CloseDialog(int nVal);
 

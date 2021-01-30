@@ -260,9 +260,6 @@
     <None Include="res\ShairportRecorder.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\update-16.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
