@@ -92,23 +92,6 @@ ULONG CreateRand(ULONG nMin = 0, ULONG nMax = MAXDWORD);
 
 ULONGLONG ToDacpID(PCSTR strID);
 
-inline ATL::CString GetLanguageAbbr()
-{
-	ATL::CString strLang = L"en";
-
-	LANGID lid = GetUserDefaultLangID();
-
-	switch(PRIMARYLANGID(lid))
-	{
-		case LANG_GERMAN:
-		{
-			strLang = L"de";
-		}
-		break;
-	}
-	return strLang;
-}
-
 struct ic_char_traits : public std::char_traits<char>
 {
     static bool eq(char c1, char c2)
