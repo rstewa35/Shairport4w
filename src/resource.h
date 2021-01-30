@@ -69,7 +69,6 @@
 #define IDB_MUTE                        248
 #define IDB_MUTE_PRESSED                249
 #define IDD_PROGRESS                    253
-#define IDD_LIC_DIALOG                  254
 #define IDD_LIC_DIALOG1                 255
 #define IDC_APNAME                      1000
 #define IDC_CHANGENAME                  1001
@@ -87,7 +86,6 @@
 #define IDC_NAME                        1008
 #define IDC_NO_META_INFO2               1008
 #define IDC_NO_NEDIA_CONTROLS           1008
-#define IDC_EDIT                        1008
 #define IDC_DNSSD_DLL                   1009
 #define IDC_PASS                        1009
 #define IDC_INFOPANEL                   1009

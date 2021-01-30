@@ -285,16 +285,6 @@ BEGIN
     CONTROL         "Autostart",IDC_AUTOSTART,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,86,44,10
 END
 
-IDD_LIC_DIALOG DIALOGEX 0, 0, 262, 85
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "License-Key"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    EDITTEXT        IDC_EDIT,24,28,213,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,73,64,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,139,64,50,14
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -342,14 +332,6 @@ BEGIN
         VERTGUIDE, 68
         TOPMARGIN, 7
         BOTTOMMARGIN, 112
-    END
-
-    IDD_LIC_DIALOG, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 255
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 78
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -631,16 +613,6 @@ BEGIN
     CONTROL         "",IDC_STATIC_BRAND_ICON,"Static",SS_BITMAP | NOT WS_VISIBLE,35,102,15,13
 END
 
-IDD_LIC_DIALOG DIALOGEX 0, 0, 262, 85
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Lizenz-Schlüssel"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    EDITTEXT        IDC_EDIT,24,28,213,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,73,64,50,14
-    PUSHBUTTON      "Abbrechen",IDCANCEL,139,64,50,14
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -688,14 +660,6 @@ BEGIN
         HORZGUIDE, 16
         HORZGUIDE, 39
         HORZGUIDE, 48
-    END
-
-    IDD_LIC_DIALOG, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 255
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 78
     END
 END
 #endif    // APSTUDIO_INVOKED
