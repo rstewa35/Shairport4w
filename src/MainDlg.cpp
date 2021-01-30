@@ -378,7 +378,7 @@ bool CMainDlg::SendDacpCommand(const char* strCmd, bool bRetryIfFailed /* = true
 	{
 		CSocketBase client;
 
-		_LOG("Trying to connect to DACP Host %s:%lu ... ", dacpService->m_strDacpHost.c_str(), (ULONG)ntohs(dacpService->m_nDacpPort));
+		_LOG("Trying to connect to DACP Host %s:%lu ...\n", dacpService->m_strDacpHost.c_str(), (ULONG)ntohs(dacpService->m_nDacpPort));
 
 		BOOL bConnected = client.Connect(dacpService->m_strDacpHost.c_str(), dacpService->m_nDacpPort);
 
@@ -439,7 +439,7 @@ bool CMainDlg::SendDacpCommand(const char* strCmd, bool bRetryIfFailed /* = true
 
 			if (bRetryIfFailed && dacpService->m_Event.IsValid())
 			{
-				_LOG("The DACP service port may have changed - try to resolve service again ... ");
+				_LOG("The DACP service port may have changed - try to resolve service again ...\n");
 							
 				if (dacpService->m_Event.Resolve(this))
 					bResult = SendDacpCommand(strCmd, false);

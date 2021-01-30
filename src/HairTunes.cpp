@@ -278,7 +278,7 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
 
     if (sample_size != SAMPLE_SIZE)
 	{
-		_LOG("only 16-bit samples supported!");
+		_LOG("only 16-bit samples supported!\n");
 		return false;
 	}
     alac = create_alac(sample_size, NUM_CHANNELS);
@@ -461,14 +461,14 @@ bool CHairTunes::OnStart()
         ATLASSERT(FALSE);
         std::string strErr = CW2A(ErrorToString().c_str());
 
-        _LOG("failed to create Pipe: %s", strErr.c_str());
+        _LOG("failed to create Pipe: %s\n", strErr.c_str());
         return false;
     }
     if (!m_AudioPlayer.Init(hReadPipe, CAudioPlayer::GetWaveMapperID(GetSoundId()), m_nSamplingRate, NUM_CHANNELS, SAMPLE_SIZE))
     {
         std::string strErr = CW2A(ErrorToString().c_str());
 
-        _LOG("failed to init Audio Player: %s", strErr.c_str());
+        _LOG("failed to init Audio Player: %s\n", strErr.c_str());
         return false;
     }
 	return true;

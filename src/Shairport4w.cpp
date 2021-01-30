@@ -892,7 +892,7 @@ bool start_serving()
 
 void stop_serving()
 {
-	_LOG("Stopping Services .... ");
+	_LOG("Stopping Services ....\n");
 
 	raop_v6_server.Cancel();
 	raop_v4_server.Cancel();
