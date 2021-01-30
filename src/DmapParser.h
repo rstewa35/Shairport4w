@@ -29,7 +29,6 @@
 
 #pragma once
 
-#include "stdint_win.h"
 
 class CDmapParser
 {

@@ -7,7 +7,6 @@
 #include "StdAfx.h"
 #include "HairTunes.h"
 
-#include "stdint_win.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 

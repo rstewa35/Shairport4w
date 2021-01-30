@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "stdint_win.h"
 #include "Networking.h"
 
 #define RTP_BASE_HEADER_SIZE			0x04

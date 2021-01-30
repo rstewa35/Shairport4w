@@ -303,7 +303,6 @@
     <ClInclude Include="shared\myThread.h" />
     <ClInclude Include="shared\Networking.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="stdint_win.h" />
     <ClInclude Include="TrayIcon.h" />
     <ClInclude Include="shared\utils.h" />
   </ItemGroup>

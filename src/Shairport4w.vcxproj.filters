@@ -98,9 +98,6 @@
     <ClInclude Include="alac.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdint_win.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Bonjour\dns_sd.h">
       <Filter>Header Files\Bonjour</Filter>
     </ClInclude>
