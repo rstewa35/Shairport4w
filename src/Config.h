@@ -17,7 +17,6 @@
 #define APP_NAME_A "Shairport4w"
 #define APP_NAME_W L"Shairport4w"
 
-#define EVENT_NAME_EXIT_PROCESS _T("Shairport4w_ExitProcess")
 #define EVENT_NAME_SHOW_WINDOW	_T("Shairport4w_ShowMain")
 
 extern	CMutex		mtxAppSessionInstance;
