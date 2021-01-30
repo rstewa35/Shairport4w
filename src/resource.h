@@ -68,7 +68,6 @@
 #define IDB_ART_SHADOW                  247
 #define IDB_MUTE                        248
 #define IDB_MUTE_PRESSED                249
-#define IDD_PROGRESS                    253
 #define IDD_LIC_DIALOG1                 255
 #define IDC_APNAME                      1000
 #define IDC_CHANGENAME                  1001
@@ -133,8 +132,6 @@
 #define IDC_CHECK4                      1046
 #define IDC_STATIC_WAVEOUT              1047
 #define IDC_PROGRESS1                   1048
-#define IDC_PROGRESS                    1048
-#define IDC_STATIC_INFO                 1049
 #define IDC_STATIC_1                    1050
 #define IDC_STATIC_2                    1051
 #define IDC_BUTTON1                     1052
@@ -151,7 +148,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        259
-#define _APS_NEXT_COMMAND_VALUE         32788
+#define _APS_NEXT_COMMAND_VALUE         32789
 #define _APS_NEXT_CONTROL_VALUE         1054
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

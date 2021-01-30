@@ -92,24 +92,6 @@ IDR_MAINFRAME           ICON                    "res\\Shairport4w.ico"
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS
-BEGIN
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
-    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
-    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
-    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
-    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
-    VK_F5,          ID_REFRESH,             VIRTKEY, NOINVERT
-END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -146,41 +128,6 @@ BEGIN
         VALUE "Translation", 0x409, 1200
     END
 END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_PROGRESS DIALOGEX 0, 0, 231, 94
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Progress"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    PUSHBUTTON      "Cancel",IDCANCEL,90,73,50,14
-    LTEXT           "Info",IDC_STATIC_INFO,21,22,188,8
-    CONTROL         "",IDC_PROGRESS,"msctls_progress32",WS_BORDER,21,36,188,14
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_PROGRESS, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 224
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 87
-    END
-END
-#endif    // APSTUDIO_INVOKED
 
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
@@ -409,79 +356,13 @@ BEGIN
     IDS_SYSTEM_DEFAULT      "system-default"
     IDS_INSTALL_BONJOUR     "Please install Bonjour for Windows from here: http://support.apple.com/kb/DL999 \n\nKlick OK to get forwarded"
     IDS_STATUS_CONNECTED    "Connected to """
-    IDS_UNINSTALL           "Do you want to uninstall Shairport4w now?"
-    IDS_UNINSTALL_ERROR     "Shairport4w isn't installed correctly and though can not be uninstalled"
     IDS_ERR_MULTIPLE_INSTANCES 
                             "You can run only one instance of this configuration"
-    IDS_UNINSTALL_SUCCESS   "Shairport4w has been removed from your Computer successfully"
-END
-
-STRINGTABLE
-BEGIN
-    ID_FILE_NEW             "Create a new document\nNew"
-    ID_FILE_OPEN            "Open an existing document\nOpen"
-    ID_FILE_CLOSE           "Close the active document\nClose"
-    ID_FILE_SAVE            "Save the active document\nSave"
-    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
-    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
-    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
-    ID_FILE_PRINT           "Print the active document\nPrint"
-    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
 END
 
 STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
-    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
-END
-
-STRINGTABLE
-BEGIN
-    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
-    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
-END
-
-STRINGTABLE
-BEGIN
-    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
-    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
-    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
-    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
-    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
-    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_CLEAR           "Erase the selection\nErase"
-    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
-    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
-    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
-    ID_EDIT_FIND            "Find the specified text\nFind"
-    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
-    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
-    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
-    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
-    ID_EDIT_UNDO            "Undo the last action\nUndo"
-    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
-END
-
-STRINGTABLE
-BEGIN
-    ATL_IDS_SCSIZE          "Change the window size"
-    ATL_IDS_SCMOVE          "Change the window position"
-    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
-    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
-    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
-    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
-    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
-END
-
-STRINGTABLE
-BEGIN
-    ATL_IDS_SCRESTORE       "Restore the window to normal size"
-    ATL_IDS_SCTASKLIST      "Activate Task List"
-    ATL_IDS_MDICHILD        "Activate this window"
 END
 
 STRINGTABLE
@@ -491,23 +372,7 @@ END
 
 STRINGTABLE
 BEGIN
-    ATL_IDS_MRU_FILE        "Open this document"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_UNINSTALL_SUCCESS_REBOOT 
-                            "Shairport4w has been removed from your Computer successfully. Deletion of some files has been deferred for reboot. Do you want to reboot now?"
-    IDS_ONLINE_UPDATE       "Online-Update..."
-    IDS_UPDATE_ERROR_FMT    "Failed to determine Version-Info. Error-Code: %lu/%ld. Please try again later."
-    IDS_DOWNLOAD_ERROR_FMT  "Failed to download new Setup. Error-Code: %lu/%ld. Please try again later."
-    IDS_NEW_VERSION_AVAILABLE 
-                            "A new version is available. Download and install now?"
-    IDS_UPDATE_NOT_SIGNED   "The downloaded Update-File is not properly signed"
-    IDS_FILE_NOT_SIGNED     "File %s is not signed"
-    IDS_NO_NEW_VERSION      "The latest version is installed"
     IDS_CANCEL              "Cancel"
-    IDS_LOAD_UPDATE         "Download Update"
 END
 
 #endif    // English resources
@@ -737,79 +602,13 @@ BEGIN
     IDS_SYSTEM_DEFAULT      "wie im System eingestellt"
     IDS_INSTALL_BONJOUR     "Installiere bitte Bonjour für Windows von hier: http://support.apple.com/kb/DL999 \n\nKlicke OK um dorthin geleitet zu werden"
     IDS_STATUS_CONNECTED    "Verbunden mit """
-    IDS_UNINSTALL           "Möchtest Du Shairport4w jetzt deinstallieren?"
-    IDS_UNINSTALL_ERROR     "Shairport4w ist nicht korrekt installiert und kann somit nicht deinstalliert werden"
     IDS_ERR_MULTIPLE_INSTANCES 
                             "Du kannst nur eine Instanz des Programms starten"
-    IDS_UNINSTALL_SUCCESS   "Shairport4w wurde erfolgreich deinstalliert"
-END
-
-STRINGTABLE
-BEGIN
-    ID_FILE_NEW             "Neues Dokument erstellen\nNeu"
-    ID_FILE_OPEN            "Existierendes Dokument öffnen\nÖffnen"
-    ID_FILE_CLOSE           "Aktuelles Dokument schließen\nSchließen"
-    ID_FILE_SAVE            "Aktuelles Dokument speichern\nSpeichern"
-    ID_FILE_SAVE_AS         "Aktuelles Dokument speichern unter\nSpeichern unter"
-    ID_FILE_PAGE_SETUP      "Drucker Seiteneinstellungen ändern\nSeiteneinstellungen"
-    ID_FILE_PRINT_SETUP     "Drucker Optionen ändern\nDrucker Optionen"
-    ID_FILE_PRINT           "Aktuelles Dokument drucken\nDrucken"
-    ID_FILE_PRINT_PREVIEW   "Druckvorschau\nDruckvorschau"
 END
 
 STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Programm Information anzeigen\nÜber"
-    ID_APP_EXIT             "Anwendung beenden\nBeenden"
-END
-
-STRINGTABLE
-BEGIN
-    ID_NEXT_PANE            "Nächstes Fenster\nNächstes Fenster"
-    ID_PREV_PANE            "Voriges Fenster\nVoriges Fenster"
-END
-
-STRINGTABLE
-BEGIN
-    ID_WINDOW_NEW           "Neues Fenster\nNeues Fenster"
-    ID_WINDOW_ARRANGE       "Icons ordnen\nIcons ordnen"
-    ID_WINDOW_CASCADE       "Fenster überlappend\nFenster überlappend"
-    ID_WINDOW_TILE_HORZ     "Fenster nicht überlappend\nFenster nicht überlappend"
-    ID_WINDOW_TILE_VERT     "Fenster teilen\nFenster teilen"
-    ID_WINDOW_SPLIT         "Aktuelles Fenster aufteilen\nAufteilen"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_CLEAR           "Auswahl löschen\nLöschen"
-    ID_EDIT_CLEAR_ALL       "Alles Löschen\nAlles Löschen"
-    ID_EDIT_COPY            "In Zwischenablage kopieren\nKopieren"
-    ID_EDIT_CUT             "Ausschneiden in Zwischenablage\nAusschneiden"
-    ID_EDIT_FIND            "Suchen\nSuchen"
-    ID_EDIT_PASTE           "Aus Zwischenablage einfügen\nEinfügen"
-    ID_EDIT_REPEAT          "Letzte Aktion wiederholen\nWiederholen"
-    ID_EDIT_REPLACE         "Ersetzen\nErsetzen"
-    ID_EDIT_SELECT_ALL      "Alles auswählen\nAlles auswählen"
-    ID_EDIT_UNDO            "Letzte Aktion widerrufen\nWiderrufen"
-    ID_EDIT_REDO            "Letzte Aktion wiederherstellen\nWiederherstellen"
-END
-
-STRINGTABLE
-BEGIN
-    ATL_IDS_SCSIZE          "Fenstergröße ändern"
-    ATL_IDS_SCMOVE          "Fensterposition ändern"
-    ATL_IDS_SCMINIMIZE      "Fenster minimieren"
-    ATL_IDS_SCMAXIMIZE      "Fenster maximieren"
-    ATL_IDS_SCNEXTWINDOW    "Nächstes Dokument anzeigen"
-    ATL_IDS_SCPREVWINDOW    "Voriges Dokument anzeigen"
-    ATL_IDS_SCCLOSE         "Aktuelles Dokument schließen"
-END
-
-STRINGTABLE
-BEGIN
-    ATL_IDS_SCRESTORE       "Fensterposition wiederherstellen"
-    ATL_IDS_SCTASKLIST      "Aufgabenliste aktivieren"
-    ATL_IDS_MDICHILD        "Dieses Fenster aktivieren"
 END
 
 STRINGTABLE
@@ -819,23 +618,7 @@ END
 
 STRINGTABLE
 BEGIN
-    ATL_IDS_MRU_FILE        "wie im System eingestellt"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_UNINSTALL_SUCCESS_REBOOT 
-                            "Shairport4w wurde erfolgreich deinstalliert. Für das restlose entfernen von Dateien muss das System neu gestartet werden. Möchtest Du das jetzt erledigen?"
-    IDS_ONLINE_UPDATE       "Online-Update..."
-    IDS_UPDATE_ERROR_FMT    "Die Versions-Ermittlung schlug fehl. Fehler-Code: %lu/%ld. Versuche es bitte später erneut."
-    IDS_DOWNLOAD_ERROR_FMT  "Der Download schlug fehl. Fehler-Code: %lu/%ld. Versuche es bitte später erneut."
-    IDS_NEW_VERSION_AVAILABLE 
-                            "Eine neue Version ist verfügbar. Jetzt laden und installieren?"
-    IDS_UPDATE_NOT_SIGNED   "Der geladenen Update-Datei kann nicht vertraut werden"
-    IDS_FILE_NOT_SIGNED     "Die Datei %s ist nicht signiert"
-    IDS_NO_NEW_VERSION      "Du hast bereits die neueste Version"
     IDS_CANCEL              "Abbrechen"
-    IDS_LOAD_UPDATE         "Update laden"
 END
 
 #endif    // German (Germany) resources
