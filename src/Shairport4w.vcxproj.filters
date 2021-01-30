@@ -257,9 +257,6 @@
     <None Include="res\mute_pressed.png">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\ShairportRecorder.ico">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

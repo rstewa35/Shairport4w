@@ -330,7 +330,6 @@
     <None Include="res\rewind_disabled.png" />
     <None Include="res\rewind_pressed.png" />
     <None Include="res\Shairport4w.ico" />
-    <None Include="res\ShairportRecorder.ico" />
     <None Include="res\skip_to_next.png" />
     <None Include="res\skip_to_next_disabled.png" />
     <None Include="res\skip_to_next_pressed.png" />
