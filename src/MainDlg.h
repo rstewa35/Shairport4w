@@ -216,15 +216,12 @@ protected:
 	CMyMutex														m_mtxQueryConnectedHost;
 	std::list<ic_string>									        m_listQueryConnectedHost;
 
-	CBitmap															m_bmUpdate;
-
 	CComVariant														m_strSetupVersion;
 	ATL::CString													m_strReady;
 
 	void PutMMState(typeMMState nMmState);
 
 public:
-	CButton															m_ctlUpdate;
 	CButton															m_ctlSet;
 	CEdit															m_ctlPassword;
 	CStatic															m_ctlPanelFrame;
