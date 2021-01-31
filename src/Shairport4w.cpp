@@ -997,6 +997,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
 	if (dlgMain.Create(NULL) == NULL)
 	{
 		ATLTRACE(_T("Main dialog creation failed!\n"));
+		_Module.RemoveMessageLoop();
 		return 0;
 	}
 
@@ -1029,6 +1030,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
     else
     {
         dlgMain.DestroyWindow();
+		_Module.RemoveMessageLoop();
     }
 
 	return 0;
