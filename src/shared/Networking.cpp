@@ -113,9 +113,6 @@ CSocketBase::CSocketBase()
 	m_sd		= INVALID_SOCKET;
 	m_bBlock	= TRUE;
 	m_nType		= -1;
-
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
 }
 
 void CSocketBase::Attach(SOCKET sd)

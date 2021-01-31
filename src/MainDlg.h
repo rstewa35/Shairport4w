@@ -102,6 +102,10 @@ public:
 		m_varSoundcardId					= CHairTunes::GetSoundId();
 		m_bGlobalMMHook						= true;
 	}
+	virtual ~CMainDlg() 
+	{
+		WSACleanup();
+	}
 	enum { IDD = IDD_MAINDLG };
 
 
