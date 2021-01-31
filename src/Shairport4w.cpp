@@ -1011,6 +1011,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
 				ATLTRACE(L"Shairport4w: Sorry, no windows hook for us...\n");
 			}
 		}
+
 		int nRet = theLoop.Run();
 
 		if (g_hDesktopHook)
@@ -1018,6 +1019,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
 			UnhookWindowsHookEx(g_hDesktopHook);
 			g_hDesktopHook = NULL;
 		}
+
 		_Module.RemoveMessageLoop();
 
 		stop_serving();
@@ -1028,6 +1030,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
     {
         dlgMain.DestroyWindow();
     }
+
 	return 0;
 }
 
@@ -1072,6 +1075,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     {
         ATLASSERT(FALSE);
     }
+
 	hRes = _Module.Init(NULL, hInstance);
 	ATLASSERT(SUCCEEDED(hRes));
 
@@ -1101,6 +1105,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         ATLVERIFY(Rsa = std::make_shared<my_crypt::Rsa>());
         ATLVERIFY(Rsa->Open(pKey, sizeKey));
     }
+
 	srand(GetTickCount());
 
     HMODULE hKernel32 = ::LoadLibraryA("Kernel32.dll");
@@ -1109,6 +1114,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	{
 		pSetThreadExecutionState = (_SetThreadExecutionState) GetProcAddress(hKernel32, "SetThreadExecutionState");
 	}
+
     int nRet = Run(lpstrCmdLine);
 
 	c_mtxConnection.Lock();
@@ -1121,9 +1127,11 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	{
 		FreeLibrary(hKernel32);
 	}
+
     Rsa.reset();
 
 	_Module.Term();
+
 	DeInitBonjour();
 
 	::CoUninitialize();
