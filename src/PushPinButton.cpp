@@ -62,7 +62,8 @@ void CPushPinButton::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	Rect r(rect.left, rect.top, rect.Width(), rect.Height());
 
-	dcGraphics.DrawImage(pBitmap, r);
+	if (pBitmap)
+		dcGraphics.DrawImage(pBitmap, r);
 }
 
 void CPushPinButton::SetPinned(BOOL bPinned)
