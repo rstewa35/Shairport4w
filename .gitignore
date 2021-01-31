@@ -38,3 +38,4 @@ Release
 src/Shairport4w.vcxproj.user
 
 *.aps
+*.bak
