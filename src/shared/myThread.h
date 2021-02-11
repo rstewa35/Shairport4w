@@ -79,7 +79,11 @@ public:
 		m_hStopEvent.Reset();
         m_nThreadID = 0;
 
-        m_hThread.Attach((HANDLE) _beginthreadex(NULL, 0, _Run, this, m_bSelfDelete ? CREATE_SUSPENDED : 0, NULL));
+		uintptr_t t = _beginthreadex(NULL, 0, _Run, this, m_bSelfDelete ? CREATE_SUSPENDED : 0, NULL);
+		if (t == NULL)
+			return false;
+
+		m_hThread.Attach((HANDLE) t);
 
 		if (m_hThread)
 		{

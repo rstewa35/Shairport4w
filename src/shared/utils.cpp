@@ -925,6 +925,9 @@ Bitmap* BitmapFromResource(HINSTANCE hInstance, LPCTSTR strID, LPCTSTR strType /
 	{
 		DWORD	nSize			= SizeofResource(hInstance, hResource);
 	    HANDLE	hResourceMem	= LoadResource(hInstance, hResource);
+		if (!hResourceMem)
+			return NULL;
+
 	    BYTE*	pData			= (BYTE*)LockResource(hResourceMem);
 
 		if (pData)
