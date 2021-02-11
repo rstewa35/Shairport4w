@@ -116,6 +116,8 @@ protected:
 		public:
 			CCThread(bool bListenForIncomingData = true)
 			{
+				m_pServer = NULL;
+				m_nThreadID = 0;
 				m_bListenForIncomingData = bListenForIncomingData;
                 m_ts = ::time(NULL);
 			}

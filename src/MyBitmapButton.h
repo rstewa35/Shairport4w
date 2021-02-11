@@ -83,6 +83,7 @@ public:
 	CMyBitmapButtonEx()
 	{
 		m_bmSelected	= NULL;
+		m_nSel			= 0;
 		m_bSelected		= false;
 	}
 	void Add(int nSelID, HINSTANCE hInstance = _Module.GetResourceInstance())
