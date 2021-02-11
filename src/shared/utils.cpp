@@ -980,7 +980,10 @@ bool GetVersionInfo(PCWSTR pszFileName, LPWSTR strVersion, ULONG nBufSizeInChars
     cbVerInfo = pGetFileVersionInfoSizeW(pszFileName, &dummy);
 
     if (!cbVerInfo)
+	{
+		FreeLibrary(hVLib);
         return false;
+	}
     
     PBYTE pVerInfo = new BYTE[cbVerInfo];
 
