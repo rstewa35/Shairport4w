@@ -1,3 +1,9 @@
+/*
+ *
+ *  PushPinButton.cpp
+ *
+ */
+
 #include "StdAfx.h"
 
 #include "utils.h"
@@ -12,6 +18,25 @@ CPushPinButton::CPushPinButton()
 	m_pUnPinnedBitmap	= NULL;
 }
 
+CPushPinButton::~CPushPinButton(void)
+{
+	ClearBitmaps();
+}
+
+void CPushPinButton::ClearBitmaps()
+{
+	if (m_pPinnedBitmap)
+	{
+		delete m_pPinnedBitmap;
+		m_pPinnedBitmap = NULL;
+	}
+	if (m_pUnPinnedBitmap)
+	{
+		delete m_pUnPinnedBitmap;
+		m_pUnPinnedBitmap = NULL;
+	}
+}
+
 void CPushPinButton::ReloadBitmaps()
 {
 	LoadBitmaps();
@@ -24,16 +49,8 @@ void CPushPinButton::ReloadBitmaps()
 
 void CPushPinButton::LoadBitmaps()
 {
-	if (m_pPinnedBitmap)
-	{
-		delete m_pPinnedBitmap;
-		m_pPinnedBitmap = NULL;
-	}
-	if (m_pUnPinnedBitmap)
-	{
-		delete m_pUnPinnedBitmap;
-		m_pUnPinnedBitmap = NULL;
-	}
+	ClearBitmaps();
+
 	m_pPinnedBitmap		= BitmapFromResource(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_PUSH_PIN_PRESSED));
 	m_pUnPinnedBitmap	= BitmapFromResource(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_PUSH_PIN_RELEASED)); 
 }

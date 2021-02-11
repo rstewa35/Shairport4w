@@ -10,11 +10,12 @@ class CPushPinButton : public CWindowImpl<CButton>
 {
 public:
 	CPushPinButton();
+	~CPushPinButton(void);
    
 	void SetPinned(BOOL bPinned);
 	BOOL IsPinned() { return m_bPinned; };
    
-	void ReloadBitmaps(); 
+	void ReloadBitmaps();
    
 	BOOL SubclassWindow(HWND hWnd);
 
@@ -27,6 +28,7 @@ protected:
    
 	void SizeToContent();
 	void LoadBitmaps();
+	void ClearBitmaps();
    
 	BOOL    m_bPinned;
 	Bitmap*	m_pPinnedBitmap;
