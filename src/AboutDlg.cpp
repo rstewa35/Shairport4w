@@ -9,7 +9,6 @@
 #include "resource.h"
 
 #include "utils.h"
-#include "MyBitmapButton.h"
 #include "aboutdlg.h"
 
 
