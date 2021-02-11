@@ -39,3 +39,6 @@ src/Shairport4w.vcxproj.user
 
 *.aps
 *.bak
+
+cov-int
+*.zip
