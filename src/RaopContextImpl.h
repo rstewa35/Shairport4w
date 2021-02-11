@@ -1,5 +1,8 @@
-////////////////////////////////////////////////////////////////////////////
-// RaopContextImpl.h
+/*
+ *
+ *  RaopContextImpl.h
+ *
+ */
 
 #pragma once
 
@@ -356,8 +359,8 @@ public:
 	{
 		return m_lfFreq;
 	}
-public:
 
+public:
 	CMyMutex				    m_mtx;
 	CHttp					    m_CurrentHttpRequest;
 	CTempBuffer<BYTE>		    m_Aesiv;
