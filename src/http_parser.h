@@ -16,6 +16,7 @@ public:
 	~CHttp()
 	{
 	}
+
 	bool Parse(bool bRequest = true)
 	{
 		if (m_strBuf.length() == 0)
@@ -38,7 +39,7 @@ public:
 			else
 			{
 				strcpy_s(pBuf, nBuf, m_strBuf.substr(0, nSep).c_str());
-				m_strBody = m_strBuf.substr(nSep+4);
+				m_strBody = m_strBuf.substr(nSep + 4);
 			}
 
 			char* ctx	= NULL;
@@ -97,12 +98,12 @@ public:
 				}
 				else
 				{
-					std::string::size_type n = i->second.find(':');
+					std::string::size_type s = i->second.find(':');
 
-					if (n != std::string::npos)
+					if (s != std::string::npos)
 					{
-						ic_string	strTok		= i->second.substr(0, n).c_str();
-						std::string		strValue	= i->second.substr(n+1);
+						ic_string		strTok		= i->second.substr(0, s).c_str();
+						std::string		strValue	= i->second.substr(s + 1);
 
 						Trim(strTok);
 						Trim(strValue);
@@ -174,6 +175,7 @@ public:
 		m_strStatus.clear();
 		m_strBuf.clear();
 	}
+
 public:
 	std::map<ic_string, std::string>	m_mapHeader;
 	std::string					        m_strMethod;
