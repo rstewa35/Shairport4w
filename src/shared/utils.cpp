@@ -1151,47 +1151,6 @@ ULONGLONG ToDacpID(PCSTR strID)
 	return nResult;
 }
 
-bool FileExists(PCWSTR strPath, ATL::CString* pStrResult /*= NULL*/)
-{
-	WIN32_FIND_DATAW fd;
-
-	HANDLE	h = FindFirstFileW(strPath, &fd);
-
-	if (h == INVALID_HANDLE_VALUE)
-		return false;
-	else
-	{
-		if (pStrResult)
-		{
-			*pStrResult = fd.cFileName;
-		}
-		FindClose(h);
-	}
-	return true;
-}
-
-std::wstring GetModulePath(HMODULE hModule /*= NULL*/, PCWSTR strModuleName /* = NULL*/)
-{
-	WCHAR FilePath[MAX_PATH];
-		
-	ATLVERIFY(GetModuleFileNameW(hModule, FilePath, sizeof(FilePath)/sizeof(WCHAR)) > 0);
-
-	if (strModuleName)
-	{
-		WCHAR* pS = wcsrchr(FilePath, L'\\');
-
-		if (pS == NULL)
-		{
-			wcscpy_s(FilePath, MAX_PATH, strModuleName);
-		}
-		else
-		{
-			wcscpy_s(pS+1, MAX_PATH - (pS-FilePath) - 1, strModuleName);
-		}
-	}
-	return std::wstring(FilePath);
-}
-
 std::wstring ErrorToString(ULONG err /*= ::GetLastError()*/, PCTSTR lpszFunction /*= NULL*/)
 {
     std::wstring r;
@@ -1225,32 +1184,3 @@ std::wstring ErrorToString(ULONG err /*= ::GetLastError()*/, PCTSTR lpszFunction
 
     return r;
 }
-
-void ErrorMsg(HWND hwnd, PCTSTR lpszTitle, PCTSTR lpszFunction, DWORD dwErr) 
-{ 
-    std::wstring s = ErrorToString(dwErr, lpszFunction);
-
-	::MessageBox(hwnd, s.c_str(), lpszTitle, MB_OK | (dwErr == ERROR_SUCCESS ? MB_ICONINFORMATION : MB_ICONEXCLAMATION));
-}
-
-int ErrorMsg(HWND hwnd, HRESULT hrErr)
-{
-	_com_error err(hrErr);
-	LPCTSTR errMsg = err.ErrorMessage();
-
-	if (errMsg)
-	{
-		int nStyle = MB_ICONERROR | MB_OK;
-
-		if ((SUCCEEDED(hrErr) && (nStyle & MB_ICONERROR)))
-		{
-			nStyle &= ~MB_ICONERROR;
-			nStyle |= MB_ICONINFORMATION;
-		}
-		std::wstring strMsg = errMsg;
-
-		return ::MessageBoxW(hwnd, strMsg.c_str(), APP_NAME_W, nStyle);
-	}
-	return MB_OK;
-}
-
