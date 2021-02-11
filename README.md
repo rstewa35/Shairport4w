@@ -1,12 +1,19 @@
 # Shairport4w
+
+[![Build status](https://ci.appveyor.com/api/projects/status/ue2t5fcw7se46lkw?svg=true)](https://ci.appveyor.com/project/olivierlevon/shairport4w)
+
+Note : This repo (https://github.com/olivierlevon/shairport4w) is a fork of the original version from Franck Friemel (https://github.com/Frank-Friemel/Shairport4w/) in order to fix some bugs and to add some features. 
+
 An AirPlay Audio-Receiver for your Windows-PC
 
 Play audio content from your iPhone, iPad, iPod or iTunes on your PC with Shairport4w.
 AirPlay lets you wirelessly stream what's on your iOS device whenever you see the AirPlay symbol
 
 Download pre compiled binaries from [`Releases`](https://github.com/Frank-Friemel/Shairport4w/releases)
-When being asked by your Firewall you should grant access to your LAN if secure. Protect Shairport4w with a password
-to be sure nobody is misusing this service
+
+When being asked by your Firewall you should grant access to your LAN if secure.
+
+Protect Shairport4w with a password to be sure nobody is misusing this service.
 
 ### Third party libraries
 * [`WTL`](https://sourceforge.net/projects/wtl) Windows Template Library
