@@ -1,0 +1,7 @@
+version: 1.0.9.5b{build}
+image: Visual Studio 2019
+configuration: Release
+platform: x64
+build:
+  project: .\src\Shairport4w.vcxproj
+  verbosity: minimal
