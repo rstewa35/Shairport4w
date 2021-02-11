@@ -1,0 +1,1 @@
+MSBuild /nologo .\src\Shairport4w.vcxproj /t:Rebuild /p:Configuration=Debug;Platform=x64
