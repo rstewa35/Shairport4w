@@ -1,4 +1,8 @@
-
+/*
+ *
+ *  AudioPlayer.cpp
+ *
+ */
 
 #include "stdafx.h"
 
@@ -23,6 +27,7 @@ public:
 		m_nLen		= 0;
 		InitNew();
 	}
+
 	inline bool IsPlayed() const
 	{
 		return m_bPlayed;
@@ -508,28 +513,6 @@ void CAudioPlayer::Close()
 	}
 	if (m_hAudioData)
 		m_hAudioData.Close();
-}
-
-void  CAudioPlayer::FadeSamples(void* pDest, const BYTE* pSrc, ULONG dwBytes, double lfVolume)
-{
-	ATLASSERT(pDest && pSrc && dwBytes % SAMPLE_FACTOR == 0 && lfVolume >= 0);
-
-	if (dwBytes)
-	{
-		const short*	sample_in			= (const short*)pSrc;
-		short*			sample_out			= (short*)pDest;
-
-		dwBytes /= SAMPLE_FACTOR;
-
-		do
-		{
-			for (auto i = 0; i < NUM_CHANNELS; ++i)
-			{
-				*sample_out++ = (short) (((double)*sample_in++) * lfVolume);
-			}
-		}				
-		while (--dwBytes);
-	}
 }
 
 void CAudioPlayer::OnPlayAudio(BYTE* pStream, ULONG dwLen)
