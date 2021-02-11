@@ -46,12 +46,14 @@ private:
 	int									m_nPos;
 	BOOL								m_bNoMetaInfo;
 	BOOL								m_bNoMediaControls;
+	ATL::CString						m_strBuffering;
 	CComboBox							m_ctlSoundcard;
 	HICON								m_hIconSmall;
 	CTrackBarCtrl						m_ctlBuffering;
 	CStatic								m_ctlBufferingLabel;
 	std::map<int, CComVariant>		    m_mapSoundcardID;
-public:	
+
+public:
 	CComVariant							m_varSoundcardId;
 };
 

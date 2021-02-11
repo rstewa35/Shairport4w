@@ -44,6 +44,9 @@ LRESULT CExtOptsDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPa
 
 	m_ctlSoundcard.AddString(strDefault);
 
+	if (!m_strBuffering.LoadString(IDS_BUFFERING))
+		m_strBuffering = _T("Buffering");
+
     std::map< UINT, std::pair<std::wstring, CComVariant> > mapDevices;
 
     CAudioPlayer::GetDeviceList(mapDevices);
@@ -165,10 +168,6 @@ void CExtOptsDlg::OnHScroll(int, short, HWND)
 
 	m_nPos = m_ctlBuffering.GetPos();
 
-	ATL::CString strBuffering;
-
-	strBuffering.LoadString(IDS_BUFFERING);
-
-	swprintf_s(buf, 256, L"%s (%ld Frames)", (PCWSTR)strBuffering, m_nPos);
+	swprintf_s(buf, 256, L"%s (%ld Frames)", (PCWSTR)m_strBuffering, m_nPos);
 	m_ctlBufferingLabel.SetWindowTextW(buf);
 }
