@@ -255,6 +255,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\.gitignore" />
+    <None Include="..\appveyor.yml" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Shairport4w.rc">
