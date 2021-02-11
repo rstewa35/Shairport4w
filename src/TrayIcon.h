@@ -6,35 +6,11 @@
 
 #pragma once
 
-// The version of the structure supported by Shell v7
-typedef struct _NOTIFYICONDATA_4 
-{
-	DWORD cbSize;
-	HWND hWnd;
-	UINT uID;
-	UINT uFlags;
-	UINT uCallbackMessage;
-	HICON hIcon;
-	TCHAR szTip[128];
-	DWORD dwState;
-	DWORD dwStateMask;
-	TCHAR szInfo[256];
-	union 
-	{
-		UINT uTimeout;
-		UINT uVersion;
-	} DUMMYUNIONNAME;
-	TCHAR szInfoTitle[64];
-	DWORD dwInfoFlags;
-	GUID guidItem;
-	HICON hBalloonIcon;
-} NOTIFYICONDATA_4;
-
-#ifndef NIIF_LARGE_ICON
-#define NIIF_LARGE_ICON 0x00000020
-#endif
 
 #define WM_TRAYICON		(WM_APP+0)
+
+// Use a guid to uniquely identify our icon
+class __declspec(uuid("0C1194D3-14C5-4E15-9F7B-CC046B69CD4C")) ShairPort4WTrayIcon;
 
 template <class T>
 class CTrayIconImpl
@@ -49,6 +25,7 @@ public:
 	{
 		RemoveTray();
 	}
+
 	bool InitTray(LPCTSTR lpszToolTip, HICON hIcon, UINT nID)
 	{
 		if (m_bInit)
@@ -56,15 +33,25 @@ public:
 
 		T* pT = static_cast<T*>(this);
 	
-		_tcsncpy_s(m_nid.szTip, _countof(m_nid.szTip), lpszToolTip, _TRUNCATE);
+		// add the icon, setting the icon, tooltip, and callback message.
+		// the icon will be identified with the GUID
 
-		m_nid.cbSize			= sizeof(NOTIFYICONDATA_4);
+		m_nid.cbSize			= sizeof(NOTIFYICONDATA);
 		m_nid.hWnd				= pT->m_hWnd;
 		m_nid.uID				= nID;
+		m_nid.guidItem			= __uuidof(ShairPort4WTrayIcon);
 		m_nid.hIcon				= hIcon;
-		m_nid.uFlags			= NIF_MESSAGE | NIF_ICON | NIF_TIP;
+		m_nid.uFlags			= NIF_ICON | NIF_TIP | NIF_MESSAGE | NIF_SHOWTIP | NIF_GUID;
 		m_nid.uCallbackMessage	= WM_TRAYICON;
+		_tcsncpy_s(m_nid.szTip, _countof(m_nid.szTip), lpszToolTip, _TRUNCATE);
 		m_bInit					= Shell_NotifyIcon(NIM_ADD, (PNOTIFYICONDATA)&m_nid) ? true : false;
+
+		if (m_bInit)
+		{
+			// NOTIFYICON_VERSION_4 is prefered
+			m_nid.uVersion = NOTIFYICON_VERSION_4;
+			m_bInit		   =  Shell_NotifyIcon(NIM_SETVERSION, &m_nid);	
+		}
 
 		return m_bInit;
 	}
@@ -117,8 +104,11 @@ public:
 	{
 		if (m_bInit)
 		{
-			m_nid.uFlags = 0;
-			Shell_NotifyIcon(NIM_DELETE, (PNOTIFYICONDATA)&m_nid);
+			NOTIFYICONDATA nid	= { 0 };
+			nid.cbSize			= sizeof(nid);
+			nid.uFlags			= NIF_GUID;
+			nid.guidItem		= __uuidof(ShairPort4WTrayIcon);
+			Shell_NotifyIcon(NIM_DELETE, (PNOTIFYICONDATA)&nid);
 			m_bInit = false;
 		}
 	}
@@ -161,7 +151,8 @@ public:
 		}
 		return 0;
 	}
+
 protected:
 	bool				m_bInit;
-	NOTIFYICONDATA_4	m_nid;
+	NOTIFYICONDATA		m_nid;
 };
