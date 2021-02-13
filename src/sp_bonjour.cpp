@@ -690,7 +690,7 @@ bool CDnsSD_BrowseForService::Start(const char* strRegType, HWND hWnd, UINT nMsg
 	m_hWnd			= hWnd;
 	m_pCallback		= NULL;
 
-	if (kDNSServiceErr_NoError == StaticDNSServiceBrowse(&m_sdref, 0, 0, strRegType, NULL, MyDNSServiceBrowseReply, this))
+	if (kDNSServiceErr_NoError == StaticDNSServiceBrowse(&m_sdref, 0, kDNSServiceInterfaceIndexAny, strRegType, NULL, MyDNSServiceBrowseReply, this))
 	{
 		return CMyThread::Start() ? true : false;
 	}
@@ -705,7 +705,7 @@ bool CDnsSD_BrowseForService::Start(const char* strRegType, IDNSServiceBrowseRep
 
 	ATLASSERT(m_pCallback);
 
-	if (kDNSServiceErr_NoError == StaticDNSServiceBrowse(&m_sdref, 0, 0, strRegType, NULL, MyDNSServiceBrowseReply, this))
+	if (kDNSServiceErr_NoError == StaticDNSServiceBrowse(&m_sdref, 0, kDNSServiceInterfaceIndexAny, strRegType, NULL, MyDNSServiceBrowseReply, this))
 	{
 		return CMyThread::Start() ? true : false;
 	}
