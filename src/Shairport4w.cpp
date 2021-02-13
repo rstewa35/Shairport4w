@@ -1043,7 +1043,7 @@ int Run(LPTSTR lpstrCmdLine = NULL)
 /////////////////////////////////////////////////////////////////////
 // _tWinMain
 
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int nCmdShow)
+int WINAPI _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*/, _In_ LPTSTR lpstrCmdLine, _In_ int nCmdShow)
 {
 	HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	ATLASSERT(SUCCEEDED(hRes));
