@@ -2,7 +2,7 @@
 // https://github.com/mattstevens/dmap-parser
 //
 //
-// Copyright (c) 2011-2013 Matt Stevens
+// Copyright (c) 2011-2017 Matt Stevens
 // 
 // 
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -29,6 +29,7 @@
 
 #pragma once
 
+struct dmap_field;
 
 class CDmapParser
 {
@@ -40,6 +41,7 @@ public:
 	int dmap_parse(void* ctx, const char *buf, size_t len);
 
 protected:
+	int dmap_parse_internal(void* ctx, const char *buf, size_t len, const struct dmap_field *parent);
 	virtual void on_dict_start	(void* ctx, const char *code, const char *name) {}
 	virtual void on_dict_end	(void* ctx, const char *code, const char *name) {}
 	virtual void on_int32		(void* ctx, const char *code, const char *name, int32_t value) {}
