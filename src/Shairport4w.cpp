@@ -509,7 +509,11 @@ protected:
 						{
 							pRaopContext->ResetSongInfos();
 
-							dmap_parse(pRaopContext.get(), request.m_strBody.c_str(), request.m_strBody.length());
+							int ret = dmap_parse(pRaopContext.get(), request.m_strBody.c_str(), request.m_strBody.length());
+							if (ret == -1)
+							{
+								_LOG("DMAP parse failed\n");
+							}
 
 							if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
 								dlgMain.PostMessage(WM_SONG_INFO);
