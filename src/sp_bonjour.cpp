@@ -534,23 +534,23 @@ bool CDnsSD_Thread::OnStart()
 {
 	ATLASSERT(m_sdref);
 
-	int sd = StaticDNSServiceRefSockFD(m_sdref);
-
+	SOCKET sd = StaticDNSServiceRefSockFD(m_sdref);
 	if (sd == INVALID_SOCKET)
 	{
 		ATLASSERT(FALSE);
 		return false;
 	}
+
 	WSAEventSelect(sd, NULL, 0);
 
 	DWORD dw = TRUE;
-
 	if (ioctlsocket(sd, FIONBIO, &dw) == SOCKET_ERROR)
 	{
 		ATLASSERT(FALSE);
 		return false;
 	}
-    m_hEvent.Close();
+
+	m_hEvent.Close();
     m_hEvent.Attach(::WSACreateEvent());
 
 	if (m_hEvent == WSA_INVALID_EVENT)
@@ -559,12 +559,14 @@ bool CDnsSD_Thread::OnStart()
 		ATLASSERT(FALSE);
 		return false;
 	}
+
 	if (WSAEventSelect(sd, m_hEvent, FD_READ|FD_CLOSE) != 0)
 	{
 		::closesocket(sd);
 		ATLASSERT(FALSE);
 		return false;
 	}
+
 	m_socket.Attach(sd);
 	return true;
 }
