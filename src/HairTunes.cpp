@@ -199,14 +199,15 @@ int CHairTunes::AlacDecode(unsigned char* pDest, const unsigned char* pBuf, int 
 
     memcpy(packet+aeslen, pBuf+aeslen, len-aeslen);  
 
-	int outsize;
+	int outsize = RAOP_PACKET_MAX_SIZE;
 
-    decode_frame(m_decoder_info, packet, pDest, &outsize);
+    alac_decode_frame(m_decoder_info, packet, pDest, &outsize);
 
     ATLASSERT(outsize <= FRAME_BYTES);
 
 	if (packet != buf)
 		delete [] packet;
+
 	return outsize;
 }
 
@@ -273,8 +274,6 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
 	}
 	ATLASSERT(m_decoder_info == NULL);
 
-    alac_file* alac;
-
     m_nFrameSize	= m_mapFmtp[1]; 
     m_nSamplingRate = m_mapFmtp[11];
 
@@ -285,8 +284,8 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
 		_LOG("only 16-bit samples supported!\n");
 		return false;
 	}
-    alac = create_alac(sample_size, NUM_CHANNELS);
 
+	alac_file* alac = alac_create(sample_size, NUM_CHANNELS);
     if (!alac)
         return false;
 
@@ -304,7 +303,7 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
 
     m_decoder_info = alac;
 
-    allocate_buffers(alac);	
+    alac_allocate_buffers(alac);
 
 	m_bFlush = false;
 	m_bPause = false;
@@ -392,7 +391,7 @@ void CHairTunes::Stop()
 
 	if (m_decoder_info)
 	{
-		destroy_alac(m_decoder_info);
+		alac_free(m_decoder_info);
 		m_decoder_info = NULL;
 	}
 	m_Queue.clear();

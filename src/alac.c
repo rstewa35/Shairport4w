@@ -52,7 +52,7 @@ static const int host_bigendian = 0;
 struct {signed int x:24;} se_struct_24;
 #define SignExtend24(val) (se_struct_24.x = val)
 
-void allocate_buffers(alac_file *alac)
+void alac_allocate_buffers(alac_file *alac)
 {
     alac->predicterror_buffer_a = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
     alac->predicterror_buffer_b = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
@@ -62,18 +62,6 @@ void allocate_buffers(alac_file *alac)
 
     alac->uncompressed_bytes_buffer_a = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
     alac->uncompressed_bytes_buffer_b = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
-}
-
-static void deallocate_buffers(alac_file *alac)
-{
-    free(alac->predicterror_buffer_a);
-    free(alac->predicterror_buffer_b);
-
-    free(alac->outputsamples_buffer_a);
-    free(alac->outputsamples_buffer_b);
-
-    free(alac->uncompressed_bytes_buffer_a);
-    free(alac->uncompressed_bytes_buffer_b);
 }
 
 void alac_set_info(alac_file *alac, char *inputbuffer)
@@ -119,8 +107,7 @@ void alac_set_info(alac_file *alac, char *inputbuffer)
   if (!host_bigendian)
       _Swap32(alac->setinfo_8a_rate);
 
-  allocate_buffers(alac);
-
+  alac_allocate_buffers(alac);
 }
 
 /* stream reading */
@@ -696,10 +683,11 @@ static void deinterlace_24(int32_t *buffer_a, int32_t *buffer_b,
 
 }
 
-void decode_frame(alac_file *alac,
+void alac_decode_frame(alac_file *alac,
                   unsigned char *inbuffer,
                   void *outbuffer, int *outputsize)
 {
+	int outbuffer_allocation_size = *outputsize; // initial value
     int channels;
     int32_t outputsamples = alac->setinfo_max_samples_per_frame;
 
@@ -710,6 +698,12 @@ void decode_frame(alac_file *alac,
     channels = readbits(alac, 3);
 
     *outputsize = outputsamples * alac->bytespersample;
+	if (*outputsize > outbuffer_allocation_size)
+	{
+		ATLTRACE("FIXME: Not enough space if the output buffer for audio frame - E1.\n");
+		*outputsize = 0;
+		return;
+	}
 
     switch(channels)
     {
@@ -741,6 +735,12 @@ void decode_frame(alac_file *alac,
              * as a 32bit integer */
             outputsamples = readbits(alac, 32);
             *outputsize = outputsamples * alac->bytespersample;
+			if (*outputsize > outbuffer_allocation_size)
+			{
+				ATLTRACE("FIXME: Not enough space if the output buffer for audio frame - E2.\n");
+				*outputsize = 0;
+				return;
+			}
         }
 
         readsamplesize = alac->setinfo_sample_size - (uncompressed_bytes * 8);
@@ -800,7 +800,7 @@ void decode_frame(alac_file *alac,
             }
             else
             {
-                ATLTRACE( "FIXME: unhandled predicition type: %i\n", prediction_type);
+                ATLTRACE( "FIXME: unhandled prediction type for compressed case: %i\n", prediction_type);
                 /* i think the only other prediction type (or perhaps this is just a
                  * boolean?) runs adaptive fir twice.. like:
                  * predictor_decompress_fir_adapt(predictor_error, tempout, ...)
@@ -918,6 +918,13 @@ void decode_frame(alac_file *alac,
              * as a 32bit integer */
             outputsamples = readbits(alac, 32);
             *outputsize = outputsamples * alac->bytespersample;
+			if (*outputsize > outbuffer_allocation_size)
+			{
+				ATLTRACE("FIXME: Not enough space if the output buffer for audio frame - E3.\n");
+
+				*outputsize = 0;
+				return;
+			}
         }
 
         readsamplesize = alac->setinfo_sample_size - (uncompressed_bytes * 8) + 1;
@@ -1000,7 +1007,7 @@ void decode_frame(alac_file *alac,
             }
             else
             { /* see mono case */
-                ATLTRACE( "FIXME: unhandled predicition type: %i\n", prediction_type_a);
+                ATLTRACE( "FIXME: unhandled predicition type on channel 1: %i\n", prediction_type_a);
             }
 
             /* channel 2 */
@@ -1025,7 +1032,7 @@ void decode_frame(alac_file *alac,
             }
             else
             {
-                ATLTRACE( "FIXME: unhandled predicition type: %i\n", prediction_type_b);
+                ATLTRACE( "FIXME: unhandled predicition type on channel 2: %i\n", prediction_type_b);
             }
         }
         else
@@ -1113,10 +1120,13 @@ void decode_frame(alac_file *alac,
     }
 }
 
-alac_file *create_alac(int samplesize, int numchannels)
+alac_file *alac_create(int samplesize, int numchannels)
 {
     alac_file *newfile = (alac_file*)malloc(sizeof(alac_file));
+	if (newfile == NULL)
+		return NULL;
 
+    memset(newfile, 0, sizeof(alac_file));
     newfile->samplesize = samplesize;
     newfile->numchannels = numchannels;
     newfile->bytespersample = (samplesize / 8) * numchannels;
@@ -1124,8 +1134,22 @@ alac_file *create_alac(int samplesize, int numchannels)
     return newfile;
 }
 
-void destroy_alac(alac_file* alac)
+void alac_free(alac_file* alac)
 {
-	deallocate_buffers(alac);
+	if (alac->predicterror_buffer_a)
+		free(alac->predicterror_buffer_a);
+	if (alac->predicterror_buffer_b)
+		free(alac->predicterror_buffer_b);
+
+	if (alac->outputsamples_buffer_a)
+		free(alac->outputsamples_buffer_a);
+	if (alac->outputsamples_buffer_b)
+		free(alac->outputsamples_buffer_b);
+
+	if (alac->uncompressed_bytes_buffer_a)
+		free(alac->uncompressed_bytes_buffer_a);
+	if (alac->uncompressed_bytes_buffer_b)
+		free(alac->uncompressed_bytes_buffer_b);
+
 	free(alac);
 }
