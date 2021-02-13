@@ -303,7 +303,8 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
 
     m_decoder_info = alac;
 
-    alac_allocate_buffers(alac);
+    if (!alac_allocate_buffers(alac))
+		return false;
 
 	m_bFlush = false;
 	m_bPause = false;

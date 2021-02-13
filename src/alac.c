@@ -52,7 +52,32 @@ static const int host_bigendian = 0;
 struct {signed int x:24;} se_struct_24;
 #define SignExtend24(val) (se_struct_24.x = val)
 
-void alac_allocate_buffers(alac_file *alac)
+static void alac_deallocate_buffers(alac_file *alac)
+{
+	if (alac->predicterror_buffer_a)
+		free(alac->predicterror_buffer_a);
+	if (alac->predicterror_buffer_b)
+		free(alac->predicterror_buffer_b);
+
+	if (alac->outputsamples_buffer_a)
+		free(alac->outputsamples_buffer_a);
+	if (alac->outputsamples_buffer_b)
+		free(alac->outputsamples_buffer_b);
+
+	if (alac->uncompressed_bytes_buffer_a)
+		free(alac->uncompressed_bytes_buffer_a);
+	if (alac->uncompressed_bytes_buffer_b)
+		free(alac->uncompressed_bytes_buffer_b);
+
+    alac->predicterror_buffer_a = NULL;
+    alac->predicterror_buffer_b = NULL;
+    alac->outputsamples_buffer_a = NULL;
+    alac->outputsamples_buffer_b = NULL;
+    alac->uncompressed_bytes_buffer_a = NULL;
+    alac->uncompressed_bytes_buffer_b = NULL;
+}
+
+int alac_allocate_buffers(alac_file *alac)
 {
     alac->predicterror_buffer_a = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
     alac->predicterror_buffer_b = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
@@ -62,52 +87,65 @@ void alac_allocate_buffers(alac_file *alac)
 
     alac->uncompressed_bytes_buffer_a = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
     alac->uncompressed_bytes_buffer_b = (int32_t *)malloc(alac->setinfo_max_samples_per_frame * 4);
+
+    if ( ! (alac->predicterror_buffer_a && alac->predicterror_buffer_b &&
+            alac->outputsamples_buffer_a && alac->outputsamples_buffer_b &&
+            alac->uncompressed_bytes_buffer_a && alac->uncompressed_bytes_buffer_b) )
+    {
+        alac_deallocate_buffers(alac);
+        return 0;
+    }
+    else
+        return 1;
 }
 
-void alac_set_info(alac_file *alac, char *inputbuffer)
+int alac_set_info(alac_file *alac, char *inputbuffer)
 {
-  char *ptr = inputbuffer;
-  ptr += 4; /* size */
-  ptr += 4; /* frma */
-  ptr += 4; /* alac */
-  ptr += 4; /* size */
-  ptr += 4; /* alac */
+    if (!alac_allocate_buffers(alac))
+        return 0;
 
-  ptr += 4; /* 0 ? */
+    char *ptr = inputbuffer;
+    ptr += 4; /* size */
+    ptr += 4; /* frma */
+    ptr += 4; /* alac */
+    ptr += 4; /* size */
+    ptr += 4; /* alac */
 
-  alac->setinfo_max_samples_per_frame = *(uint32_t*)ptr; /* buffer size / 2 ? */
-  if (!host_bigendian)
-      _Swap32(alac->setinfo_max_samples_per_frame);
-  ptr += 4;
-  alac->setinfo_7a = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_sample_size = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_rice_historymult = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_rice_initialhistory = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_rice_kmodifier = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_7f = *(uint8_t*)ptr;
-  ptr += 1;
-  alac->setinfo_80 = *(uint16_t*)ptr;
-  if (!host_bigendian)
-      _Swap16(alac->setinfo_80);
-  ptr += 2;
-  alac->setinfo_82 = *(uint32_t*)ptr;
-  if (!host_bigendian)
-      _Swap32(alac->setinfo_82);
-  ptr += 4;
-  alac->setinfo_86 = *(uint32_t*)ptr;
-  if (!host_bigendian)
-      _Swap32(alac->setinfo_86);
-  ptr += 4;
-  alac->setinfo_8a_rate = *(uint32_t*)ptr;
-  if (!host_bigendian)
-      _Swap32(alac->setinfo_8a_rate);
+    ptr += 4; /* 0 ? */
 
-  alac_allocate_buffers(alac);
+    alac->setinfo_max_samples_per_frame = *(uint32_t*)ptr; /* buffer size / 2 ? */
+    if (!host_bigendian)
+        _Swap32(alac->setinfo_max_samples_per_frame);
+    ptr += 4;
+    alac->setinfo_7a = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_sample_size = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_rice_historymult = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_rice_initialhistory = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_rice_kmodifier = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_7f = *(uint8_t*)ptr;
+    ptr += 1;
+    alac->setinfo_80 = *(uint16_t*)ptr;
+    if (!host_bigendian)
+        _Swap16(alac->setinfo_80);
+    ptr += 2;
+    alac->setinfo_82 = *(uint32_t*)ptr;
+    if (!host_bigendian)
+        _Swap32(alac->setinfo_82);
+    ptr += 4;
+    alac->setinfo_86 = *(uint32_t*)ptr;
+    if (!host_bigendian)
+        _Swap32(alac->setinfo_86);
+    ptr += 4;
+    alac->setinfo_8a_rate = *(uint32_t*)ptr;
+    if (!host_bigendian)
+        _Swap32(alac->setinfo_8a_rate);
+
+    return 1;
 }
 
 /* stream reading */
@@ -1007,7 +1045,7 @@ void alac_decode_frame(alac_file *alac,
             }
             else
             { /* see mono case */
-                ATLTRACE( "FIXME: unhandled predicition type on channel 1: %i\n", prediction_type_a);
+                ATLTRACE( "FIXME: unhandled prediction type on channel 1: %i\n", prediction_type_a);
             }
 
             /* channel 2 */
@@ -1032,7 +1070,7 @@ void alac_decode_frame(alac_file *alac,
             }
             else
             {
-                ATLTRACE( "FIXME: unhandled predicition type on channel 2: %i\n", prediction_type_b);
+                ATLTRACE( "FIXME: unhandled prediction type on channel 2: %i\n", prediction_type_b);
             }
         }
         else
@@ -1136,20 +1174,7 @@ alac_file *alac_create(int samplesize, int numchannels)
 
 void alac_free(alac_file* alac)
 {
-	if (alac->predicterror_buffer_a)
-		free(alac->predicterror_buffer_a);
-	if (alac->predicterror_buffer_b)
-		free(alac->predicterror_buffer_b);
-
-	if (alac->outputsamples_buffer_a)
-		free(alac->outputsamples_buffer_a);
-	if (alac->outputsamples_buffer_b)
-		free(alac->outputsamples_buffer_b);
-
-	if (alac->uncompressed_bytes_buffer_a)
-		free(alac->uncompressed_bytes_buffer_a);
-	if (alac->uncompressed_bytes_buffer_b)
-		free(alac->uncompressed_bytes_buffer_b);
+    alac_deallocate_buffers(alac);
 
 	free(alac);
 }
