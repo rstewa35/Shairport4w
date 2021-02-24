@@ -50,6 +50,9 @@ static char* dns_parse_domain_name(char *p, char **x)
 	compressed = 0;
 	more = 1;
 	name = (char*)malloc(1);
+	if (name == NULL)
+		return NULL;
+
 	name[0] = '\0';
 	len = 1;
 	j = 0;
@@ -64,7 +67,8 @@ static char* dns_parse_domain_name(char *p, char **x)
 		{
 			v16 = (uint16_t *)*x;
 			*x = p + (ntohs(*v16) & 0x3fff);
-			if (compressed == 0) skip += 2;
+			if (compressed == 0)
+				skip += 2;
 			compressed = 1;
 			continue;
 		}
@@ -73,7 +77,14 @@ static char* dns_parse_domain_name(char *p, char **x)
 		if (dlen > 0)
 		{
 			len += dlen;
-			name = (char*)realloc(name, len);
+			char *tmp = (char*)realloc(name, len);
+			if (tmp != NULL)
+				name = tmp;
+			else
+			{
+				free(name);
+				return NULL;
+			}
 		}
 	
 		for (i = 0; i < dlen; i++)
@@ -82,16 +93,26 @@ static char* dns_parse_domain_name(char *p, char **x)
 			*x += 1;
 		}
 		name[j] = '\0';
-		if (compressed == 0) skip += (dlen + 1);
+		if (compressed == 0)
+			skip += (dlen + 1);
 		
-		if (dlen == 0) more = 0;
+		if (dlen == 0)
+			more = 0;
 		else
 		{
 			v8 = (uint8_t *)*x;
 			if (*v8 != 0)
 			{
 				len += 1;
-				name = (char*)realloc(name, len);
+				char *tmp = (char*)realloc(name, len);
+				if (tmp != NULL)
+					name = tmp;
+				else
+				{
+					free(name);
+					return NULL;
+				}
+
 				name[j++] = '.';
 				name[j] = '\0';
 			}
@@ -295,6 +316,8 @@ void DNSSD_API MyDNSServiceQueryRecordReply
 
 			char* x		= ((char*)rdata) + 3 * sizeof(uint16_t);
 			char* name	= dns_parse_domain_name(x, &x);
+			if (name == NULL)
+				return;
 			
 			pEvent->Lock();
 			pEvent->m_strHost = name;
@@ -670,17 +693,19 @@ void CDnsSD_BrowseForService::OnDNSServiceBrowseReply(
 	if (serviceName && (m_pCallback || (m_hWnd && ::IsWindow(m_hWnd))))
 	{
 		CRegisterServiceEvent* pEvent = new CRegisterServiceEvent;
+		if (pEvent)
+		{
+			pEvent->m_nInterfaceIndex	= interfaceIndex;
+			pEvent->m_strService		= serviceName;
+			pEvent->m_strRegType		= regtype		? regtype		: "";
+			pEvent->m_strReplyDomain	= replyDomain	? replyDomain	: "";
+			pEvent->m_bRegister			= (flags & kDNSServiceFlagsAdd) ? true : false;
 
-		pEvent->m_nInterfaceIndex	= interfaceIndex;
-		pEvent->m_strService		= serviceName;
-		pEvent->m_strRegType		= regtype		? regtype		: "";
-		pEvent->m_strReplyDomain	= replyDomain	? replyDomain	: "";
-		pEvent->m_bRegister			= (flags & kDNSServiceFlagsAdd) ? true : false;
-
-		if (m_pCallback)
-			m_pCallback->OnServiceRegistered(pEvent);
-		else
-			::PostMessage(m_hWnd, m_nMsg, 0, (LPARAM)pEvent);
+			if (m_pCallback)
+				m_pCallback->OnServiceRegistered(pEvent);
+			else
+				::PostMessage(m_hWnd, m_nMsg, 0, (LPARAM)pEvent);		
+		}
 	}
 }
 

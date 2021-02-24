@@ -186,7 +186,11 @@ int CHairTunes::AlacDecode(unsigned char* pDest, const unsigned char* pBuf, int 
     unsigned char*	packet = buf;
 
 	if (len > RAOP_PACKET_MAX_SIZE)
+	{
 		packet = new unsigned char[len];
+		if (packet == NULL)
+			return 0;
+	}
 
     int aeslen = len & ~0xf;
 

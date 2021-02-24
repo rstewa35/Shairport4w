@@ -778,15 +778,18 @@ void CNetworkServer::Accept(SOCKET sd)
 	if (OnAccept(sd))
 	{
 		CCThread* pClient = new CCThread(m_bHandleClientRequests);
+		if (pClient)
+		{
+			pClient->m_pServer	= this;
+			pClient->Attach(sd);
 
-		pClient->m_pServer	= this;
-		pClient->Attach(sd);
+			m_cMutex.Lock();
+			m_clients[sd] = pClient;
+			m_cMutex.Unlock();
 
-		m_cMutex.Lock();
-		m_clients[sd] = pClient;
-		m_cMutex.Unlock();
+			pClient->Start();		
+		}
 
-		pClient->Start();
 	}
 	else
 	{

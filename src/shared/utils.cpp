@@ -118,15 +118,21 @@ bool GetValueFromRegistry(HKEY hKey, PCSTR pValueName, std::string& strValue, PC
 			dwSize += 2;
 
 			LPBYTE pBuf = new BYTE[dwSize];
-
-			memset(pBuf, 0, dwSize);
-
-			if (RegQueryValueExA(h, pValueName, NULL, NULL, pBuf, &dwSize) == ERROR_SUCCESS)
+			if (pBuf)
 			{
-				strValue	= (PCSTR)pBuf;
-				bResult		= true;
+				memset(pBuf, 0, dwSize);
+
+				if (RegQueryValueExA(h, pValueName, NULL, NULL, pBuf, &dwSize) == ERROR_SUCCESS)
+				{
+					strValue	= (PCSTR)pBuf;
+					bResult		= true;
+				}
+				delete [] pBuf;			
 			}
-			delete [] pBuf;
+			else
+			{
+				bResult		= false;
+			}
 		}
 		RegCloseKey(h);
 	}
