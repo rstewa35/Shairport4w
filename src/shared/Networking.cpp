@@ -536,6 +536,8 @@ ULONG CSocketBase::GetMACAddress(CTempBuffer<BYTE>& mac, int nIndex /*= 0*/)
 					pAdapter = pAdapter->Next;
 				}
 			}
+			if (pAdapterInfo)
+				free(pAdapterInfo);
 		}
 		FreeLibrary(hMod);
 	}
