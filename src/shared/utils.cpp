@@ -19,7 +19,7 @@ typedef BOOL (APIENTRY *_GetFileVersionInfoW)(
         DWORD dwHandle,         /* Information from GetFileVersionSize */
         DWORD dwLen,            /* Length of buffer for info */
         LPVOID lpData
-        );           
+        );
 
 typedef BOOL (APIENTRY *_VerQueryValueW)(
         const LPVOID pBlock,
@@ -41,8 +41,11 @@ bool Log(PCSTR pszFormat, ...)
 {
 	if (bLogToConsole || bLogToFile)
 	{
-		size_t	nBuf	= 32768;
+		size_t	nBuf = 4096; // 32768; //OLE very big !!
 		char*	buf		= (char*)malloc(nBuf);
+		if (!buf)
+			return false;
+
 		bool	bResult = true;
 
 		va_list ptr;
@@ -91,10 +94,15 @@ bool Log(PCSTR pszFormat, ...)
 			// catch that silently
 			bResult = false;
 		}
+
 		c_mtxLOG.Unlock();
+
+		if (buf)
+			free(buf);
 
 		return bResult;
 	}
+
 	return true;
 }
 
@@ -127,7 +135,7 @@ bool GetValueFromRegistry(HKEY hKey, PCSTR pValueName, std::string& strValue, PC
 					strValue	= (PCSTR)pBuf;
 					bResult		= true;
 				}
-				delete [] pBuf;			
+				delete [] pBuf;
 			}
 			else
 			{
@@ -898,7 +906,7 @@ Bitmap* BitmapFromBlob(const BYTE* p, long nBytes)
 
 	Bitmap* pResult = 0;
 
-	HGLOBAL hBlob = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, nBytes);  
+	HGLOBAL hBlob = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, nBytes);
 
 	if (hBlob)
 	{
@@ -1068,7 +1076,7 @@ bool GetVersionInfo(PCWSTR pszFileName, LPWSTR strVersion, ULONG nBufSizeInChars
 
 	return bResult;
 }
-									
+
 #define DELTA_EP_IN_MICRO_SECS		9435484800000000ULL
 
 ULONGLONG GetNTPTimeStamp()
@@ -1083,12 +1091,12 @@ ULONGLONG GetNTPTimeStamp()
 	tmpres |= ft.dwLowDateTime;
  
 	// convert to micro secs
-	tmpres /= 10ULL;  
+	tmpres /= 10ULL;
 	
 	// offset from 1601 to 1970
-	tmpres -= DELTA_EP_IN_MICRO_SECS; 
+	tmpres -= DELTA_EP_IN_MICRO_SECS;
 
-	return MAKEULONGLONG(tmpres % 1000000ULL, tmpres / 1000000ULL);  
+	return MAKEULONGLONG(tmpres % 1000000ULL, tmpres / 1000000ULL);
 }
 
 USHORT GetUniquePortNumber()
@@ -1166,7 +1174,7 @@ std::wstring ErrorToString(ULONG err /*= ::GetLastError()*/, PCTSTR lpszFunction
     LPVOID lpDisplayBuf	= NULL;
 
     FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
@@ -1176,11 +1184,13 @@ std::wstring ErrorToString(ULONG err /*= ::GetLastError()*/, PCTSTR lpszFunction
         0, NULL );
 
     // get the error message
-    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + (lpszFunction ? lstrlen(lpszFunction) : 0) + 40) * sizeof(TCHAR)); 
-    
-    StringCchPrintf((LPTSTR)lpDisplayBuf, 
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + (lpszFunction ? lstrlen(lpszFunction) : 0) + 40) * sizeof(TCHAR));
+	if (!lpDisplayBuf)
+		return NULL;
+
+    StringCchPrintf((LPTSTR)lpDisplayBuf,
         LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-        lpszFunction ? TEXT("%s: %s") : TEXT("%s%s"), 
+        lpszFunction ? TEXT("%s: %s") : TEXT("%s%s"),
         lpszFunction ? lpszFunction : _T(""), lpMsgBuf);
 
     r = CT2CW((LPCTSTR)lpDisplayBuf);
