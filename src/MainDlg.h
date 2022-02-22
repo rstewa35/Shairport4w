@@ -216,7 +216,6 @@ protected:
 	CMyMutex														m_mtxQueryConnectedHost;
 	std::list<ic_string>									        m_listQueryConnectedHost;
 
-	CComVariant														m_strSetupVersion;
 	ATL::CString													m_strReady;
 
 	void PutMMState(typeMMState nMmState);
