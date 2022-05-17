@@ -645,7 +645,7 @@ bool CDnsSD_Register::Start(BYTE* addr, PCSTR strApName, BOOL bNoMetaInfo, BOOL 
 														, addr[5]
 														, strApName); 
 
-														char* argv[] = { "tp=UDP", "sm=false", "sv=false", "ek=1", "et=0,1", bNoMetaInfo ? "" : "md=0,1,2", "cn=0,1", "ch=2", "ss=16", "sr=44100", bPassword ? "pw=false" : "pw=true", "vn=3", "txtvers=1", NULL };
+	char* argv[] = { "tp=UDP", "sm=false", "sv=false", "ek=1", "et=0,1", bNoMetaInfo ? "" : "md=0,1,2", "cn=0,1", "ch=2", "ss=16", "sr=44100", bPassword ? "pw=false" : "pw=true", "vn=3", "txtvers=1", NULL };
 
 	if (kDNSServiceErr_NoError == RegisterService(&m_sdref, buf, "_raop._tcp", ".", nPort, argv, MyRegisterServiceReply, this))
 	{

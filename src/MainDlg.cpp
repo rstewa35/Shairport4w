@@ -17,7 +17,7 @@
 #include "RaopContext.h"
 #include "RaopContextImpl.h"
 #include "Config.h"
-#include "aboutdlg.h"
+#include "AboutDlg.h"
 #include "MainDlg.h"
 #include "ExtOptsDlg.h"
 #include "ChangeNameDlg.h"
@@ -1640,6 +1640,13 @@ LRESULT CMainDlg::OnSetMultimediaState(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM 
 					m_ctlSkipPrev.EnableWindow(true);
 				}
 				break;
+
+				case skip_next:
+				case skip_prev:
+				{
+
+				}
+				break;
 			}
 		}
 		else
@@ -1666,7 +1673,8 @@ bool CMainDlg::OnPlay(UINT, int nID, HWND)
 
 		case pause:
 		{
-			if (bResult = SendDacpCommand("play"))
+			bResult = SendDacpCommand("play");
+			if (bResult)
 				Resume();
 		}
 		break;
@@ -1674,7 +1682,8 @@ bool CMainDlg::OnPlay(UINT, int nID, HWND)
 		case ffw:
 		case rew:
 		{
-			if (bResult = SendDacpCommand("playresume"))
+			bResult = SendDacpCommand("playresume");
+			if (bResult)
 				Resume();
 		}
 		break;
@@ -1761,7 +1770,8 @@ bool CMainDlg::OnPause(UINT, int /*nID*/, HWND)
 	{
 		case play:
 		{
-			if (bResult = SendDacpCommand("pause"))
+			bResult = SendDacpCommand("pause");
+			if (bResult)
 				Pause();
 		}
 		break;
@@ -1777,7 +1787,8 @@ bool CMainDlg::OnPause(UINT, int /*nID*/, HWND)
 			if (SendDacpCommand("playresume"))
 				Resume();
 
-			if (bResult = SendDacpCommand("pause"))
+			bResult = SendDacpCommand("pause");
+			if (bResult)
 				Pause();
 		}
 		break;
@@ -1793,7 +1804,8 @@ bool CMainDlg::OnForward(UINT, int nID, HWND)
 	{
 		case play:
 		{
-			if (bResult = SendDacpCommand("beginff"))
+			bResult = SendDacpCommand("beginff");
+			if (bResult)
 			{
 				if (m_pRaopContext && m_pRaopContext->m_nTimeTotal > 0)
 				{
@@ -1811,7 +1823,8 @@ bool CMainDlg::OnForward(UINT, int nID, HWND)
 		case ffw:
 		case rew:
 		{
-			if (bResult = SendDacpCommand("playresume"))
+			bResult = SendDacpCommand("playresume");
+			if (bResult)
 				Resume();
 		}
 		break;

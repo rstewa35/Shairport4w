@@ -40,7 +40,7 @@ public:
 
 		Announce();
 	}
-	~CRaopContext()
+	virtual ~CRaopContext()
 	{
 		if (m_pDecoder)
 			m_pDecoder.reset();

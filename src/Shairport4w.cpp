@@ -38,7 +38,7 @@ CMyMutex		mtxRSA;
 
 std::shared_ptr<my_crypt::Rsa> Rsa;
 
-std::string			strPrivateKey   =   "UlNBMwAIAAADAAAAAAEAAIAAAACAAAAAAQAB59dE8qLieItsH1WgjrcFRKj6eUWqi+bGLOX1HL3U"
+std::string		strPrivateKey   =   "UlNBMwAIAAADAAAAAAEAAIAAAACAAAAAAQAB59dE8qLieItsH1WgjrcFRKj6eUWqi+bGLOX1HL3U"
                                     "3GhC/j0Qg90u3sG/1CUtwC5vOYvfDmFI6oSFXi5ELabWJmT2dKHzBJKa3k9ok+8t9ucRqMd6DZHJ"
                                     "2YCCLlDRKSKv6kDqnw4UwPdpOMXziC/AMj3Z/lUVX1G7WSHCAWKf1zNS1eLvqr+boEjXuBOitnZ/"
                                     "bDzPHrTOZz0Dew0uowxf/+sG+NCK3eQJVxqcaJ/vEHKIVd2M+5qL71yJQ+87X6oV3eaYvt3zWZYD"
