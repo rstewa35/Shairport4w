@@ -32,7 +32,7 @@ static 	CMyMutex								            c_mtxConnection;
 static	HHOOK									            g_hDesktopHook		= NULL;
 
 CAppModule		_Module;
-CMainDlg		dlgMain;
+CMainDlg		*dlgMain;
 BYTE			hw_addr[6];
 CMyMutex		mtxRSA;
 
@@ -96,7 +96,7 @@ static bool digest_ok(std::shared_ptr<CRaopContext>& pRaopContext)
                 mapAuth[strLeft.c_str()] = strRight;
                 return true;
             });
-            std::string str1 = mapAuth["username"] + std::string(":") + mapAuth["realm"] + std::string(":") + std::string(CT2CA(dlgMain.m_strPassword));
+            std::string str1 = mapAuth["username"] + std::string(":") + mapAuth["realm"] + std::string(":") + std::string(CT2CA(dlgMain->m_strPassword));
             std::string str2 = pRaopContext->m_CurrentHttpRequest.m_strMethod + std::string(":") + mapAuth["uri"];
 
             std::string strDigest1 = MD5_Hex((const BYTE*)str1.c_str(), (long)str1.length(), true);
@@ -295,7 +295,7 @@ protected:
 					response.m_mapHeader["Apple-Response"] = strAppleResponse;
 				}
 			}
-			if (dlgMain.m_strPassword.GetLength() > 0)
+			if (dlgMain->m_strPassword.GetLength() > 0)
 			{
 				if (!digest_ok(pRaopContext))
 				{
@@ -308,7 +308,7 @@ protected:
 					pRaopContext->m_strNonce = MD5_Hex(nonce, 20, true);
 
 					response.m_mapHeader["WWW-Authenticate"] =		std::string("Digest realm=\"") 
-																+	std::string(CT2CA(dlgMain.m_strApName))
+																+	std::string(CT2CA(dlgMain->m_strApName))
 																+	std::string("\", nonce=\"")
 																+	pRaopContext->m_strNonce
 																+	std::string("\"");
@@ -409,10 +409,10 @@ protected:
 				response.m_mapHeader["Session"] = "DEADBEEF";
 
 				// kick currently playing stream
-				if (dlgMain.GetMMState() != CMainDlg::pause)
+				if (dlgMain->GetMMState() != CMainDlg::pause)
 				{
 					// give playing client a chance to disconnect itself
-					if (dlgMain.OnPause())
+					if (dlgMain->OnPause())
 					{
 						long nTry = 12;
 
@@ -420,7 +420,7 @@ protected:
 						{ 
 							Sleep(12);
 						}
-						while(dlgMain.GetMMState() != CMainDlg::pause && --nTry > 0);
+						while(dlgMain->GetMMState() != CMainDlg::pause && --nTry > 0);
 					}
 				}
 				c_mtxConnection.Lock();
@@ -441,9 +441,9 @@ protected:
 
 				if (request.m_mapHeader.find("DACP-ID") != request.m_mapHeader.end())
 				{
-					dlgMain.SetDacpID(ic_string("iTunes_Ctrl_") + ic_string(request.m_mapHeader["DACP-ID"].c_str()), request.m_mapHeader["Active-Remote"].c_str());
+					dlgMain->SetDacpID(ic_string("iTunes_Ctrl_") + ic_string(request.m_mapHeader["DACP-ID"].c_str()), request.m_mapHeader["Active-Remote"].c_str());
 				}
-				dlgMain.SendMessage(WM_RAOP_CTX, 0, (LPARAM)&pRaopContext);
+				dlgMain->SendMessage(WM_RAOP_CTX, 0, (LPARAM)&pRaopContext);
 
 				if (pRaopContext->m_pDecoder->Start(pRaopContext))
 				{
@@ -474,13 +474,13 @@ protected:
 				if (pRaopContext->m_bIsStreaming)
 					pRaopContext->m_pDecoder->Flush();
 
-				if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
-					dlgMain.PostMessage(WM_PAUSE, 1);				
+				if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
+					dlgMain->PostMessage(WM_PAUSE, 1);
 			}
 			else if (_stricmp(request.m_strMethod.c_str(), "TEARDOWN") == 0)
 			{
-				if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
-					dlgMain.PostMessage(WM_STOP);
+				if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
+					dlgMain->PostMessage(WM_STOP);
 
 				if (pRaopContext->m_bIsStreaming)
 				{
@@ -494,7 +494,7 @@ protected:
 			}
 			else if (_stricmp(request.m_strMethod.c_str(), "RECORD") == 0)
 			{
-				dlgMain.PostMessage(WM_RESUME);
+				dlgMain->PostMessage(WM_RESUME);
 				response.m_mapHeader["Audio-Latency"] = "6174";
 			}
 			else if (_stricmp(request.m_strMethod.c_str(), "SET_PARAMETER") == 0)
@@ -515,8 +515,8 @@ protected:
 								_LOG("DMAP parse failed\n");
 							}
 
-							if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
-								dlgMain.PostMessage(WM_SONG_INFO);
+							if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
+								dlgMain->PostMessage(WM_SONG_INFO);
 						}
 					}
 					else if (ct->second.length() > 6 && _strnicmp(ct->second.c_str(), "image/", 6) == 0)
@@ -552,10 +552,10 @@ protected:
 						}
 						pRaopContext->Unlock();
 
-						if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
+						if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
 						{
-							dlgMain.PostMessage(WM_INFO_BMP);
-							dlgMain.PostMessage(WM_SONG_INFO);
+							dlgMain->PostMessage(WM_INFO_BMP);
+							dlgMain->PostMessage(WM_SONG_INFO);
 						}
 					}
 					else if (_stricmp(ct->second.c_str(), "text/parameters") == 0)
@@ -653,8 +653,8 @@ protected:
 
 												pRaopContext->Unlock();
 
-												if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
-													dlgMain.PostMessage(WM_RESUME, 1);
+												if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
+													dlgMain->PostMessage(WM_RESUME, 1);
 											}
 										}
 										else
@@ -712,9 +712,9 @@ protected:
 			c_mapConnection.erase(i);
 			c_mtxConnection.Unlock();
 
-			if (dlgMain.m_hWnd && dlgMain.IsCurrentContext(pRaopContext))
+			if (dlgMain->m_hWnd && dlgMain->IsCurrentContext(pRaopContext))
 			{
-				dlgMain.PostMessage(WM_RAOP_CTX, 0, NULL);
+				dlgMain->PostMessage(WM_RAOP_CTX, 0, NULL);
 			}
 			if (pRaopContext->m_bIsStreaming)
 			{
@@ -853,19 +853,19 @@ bool start_serving()
 		return false;
 	}
 
-	bool bResult = dns_sd_register_server.Start(hw_addr, CW2A(dlgMain.m_strApName, CP_UTF8), dlgMain.m_bNoMetaInfo, dlgMain.m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
+	bool bResult = dns_sd_register_server.Start(hw_addr, CW2A(dlgMain->m_strApName, CP_UTF8), dlgMain->m_bNoMetaInfo, dlgMain->m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
 
 	if (!bResult)
 	{
 		long nTry			= 10;
-		PCSTR strApName	= CW2A(dlgMain.m_strApName, CP_UTF8);
+		PCSTR strApName	= CW2A(dlgMain->m_strApName, CP_UTF8);
 
 		do
 		{
 			_LOG("Could not register Raop.Tcp Service on Port %lu with dnssd.dll\n", (ULONG)ntohs(raop_v4_server.m_nPort));
 
 			Sleep(1000);
-			bResult = dns_sd_register_server.Start(hw_addr, strApName, dlgMain.m_bNoMetaInfo, dlgMain.m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
+			bResult = dns_sd_register_server.Start(hw_addr, strApName, dlgMain->m_bNoMetaInfo, dlgMain->m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
 			nTry--;
 		}
 		while(!bResult && nTry > 0);
@@ -877,9 +877,9 @@ bool start_serving()
 	{
 		_LOG("Registered Raop.Tcp Service ok\n");
 
-		if (!dlgMain.m_bNoMediaControl)
+		if (!dlgMain->m_bNoMediaControl)
 		{
-			if (!dns_sd_browse_dacp.Start("_dacp._tcp", dlgMain.m_hWnd, WM_DACP_REG))
+			if (!dns_sd_browse_dacp.Start("_dacp._tcp", dlgMain->m_hWnd, WM_DACP_REG))
 			{
 				_LOG("Failed to start DACP browser!\n");
 				ATLASSERT(FALSE);
@@ -942,43 +942,43 @@ LRESULT CALLBACK OnDTKeyboardEvent(int nCode, WPARAM wParam, LPARAM lParam)
 				{
 					case VK_MEDIA_PLAY_PAUSE:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_PLAY_PAUSE)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_PLAY_PAUSE)); 
 					}
 					break;
 
 					case VK_VOLUME_MUTE:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_MUTE)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_MUTE)); 
 					}
 					break;
 
 					case VK_VOLUME_DOWN:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_DOWN)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_DOWN)); 
 					}
 					break;
 
 					case VK_VOLUME_UP:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_UP)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_VOLUME_UP)); 
 					}
 					break;
 
 					case VK_MEDIA_NEXT_TRACK:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_NEXTTRACK)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_NEXTTRACK)); 
 					}
 					break;
 
 					case VK_MEDIA_PREV_TRACK:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_PREVIOUSTRACK)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_PREVIOUSTRACK)); 
 					}
 					break;
 
 					case VK_MEDIA_STOP:
 					{
-						dlgMain.PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain.m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_STOP)); 
+						dlgMain->PostMessage(WM_APPCOMMAND, (WPARAM)dlgMain->m_hWnd, MAKELONG(0, APPCOMMAND_MEDIA_STOP)); 
 					}
 					break;
 				}
@@ -993,51 +993,60 @@ LRESULT CALLBACK OnDTKeyboardEvent(int nCode, WPARAM wParam, LPARAM lParam)
 
 int Run(LPTSTR lpstrCmdLine = NULL)
 {
+	int nRet = 0;
+
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
 
-	dlgMain.ReadConfig();
-
-	if (dlgMain.Create(NULL) == NULL)
+	dlgMain = new CMainDlg();
+	if (dlgMain == NULL)
 	{
-		ATLTRACE(_T("Main dialog creation failed!\n"));
-		_Module.RemoveMessageLoop();
-		return 0;
+		ATLTRACE(_T("Main dialog object allocation failed!\n"));
 	}
+	else
+	{
+		dlgMain->ReadConfig();
 
-	if (start_serving())
-    {
-		dlgMain.ShowWindow(dlgMain.m_bStartMinimized ? dlgMain.m_bTray ? SW_HIDE : SW_SHOWMINIMIZED : SW_SHOWDEFAULT);
-
-		if (dlgMain.m_bGlobalMMHook)
+		if (dlgMain->Create(NULL) == NULL)
 		{
-			if ((g_hDesktopHook = SetWindowsHookEx(WH_KEYBOARD_LL, OnDTKeyboardEvent, NULL, 0)) == NULL)
+			ATLTRACE(_T("Main dialog creation failed!\n"));
+		}
+		else
+		{
+			if (start_serving())
 			{
-				ATLTRACE(L"Shairport4w: Sorry, no windows hook for us...\n");
+				dlgMain->ShowWindow(dlgMain->m_bStartMinimized ? dlgMain->m_bTray ? SW_HIDE : SW_SHOWMINIMIZED : SW_SHOWDEFAULT);
+
+				if (dlgMain->m_bGlobalMMHook)
+				{
+					if ((g_hDesktopHook = SetWindowsHookEx(WH_KEYBOARD_LL, OnDTKeyboardEvent, NULL, 0)) == NULL)
+					{
+						ATLTRACE(L"Shairport4w: Sorry, no windows hook for us...\n");
+					}
+				}
+
+				nRet = theLoop.Run();
+
+				if (g_hDesktopHook)
+				{
+					UnhookWindowsHookEx(g_hDesktopHook);
+					g_hDesktopHook = NULL;
+				}
+
+				stop_serving();
+			}
+			else
+			{
+				dlgMain->DestroyWindow();
 			}
 		}
-
-		int nRet = theLoop.Run();
-
-		if (g_hDesktopHook)
-		{
-			UnhookWindowsHookEx(g_hDesktopHook);
-			g_hDesktopHook = NULL;
-		}
-
-		_Module.RemoveMessageLoop();
-
-		stop_serving();
-
-		return nRet;
 	}
-    else
-    {
-        dlgMain.DestroyWindow();
-		_Module.RemoveMessageLoop();
-    }
 
-	return 0;
+	delete dlgMain;
+
+	_Module.RemoveMessageLoop();
+
+	return nRet;
 }
 
 /////////////////////////////////////////////////////////////////////
