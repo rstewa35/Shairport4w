@@ -26,7 +26,7 @@
 #include <atlframe.h>
 #include <atlctrls.h>
 #include <atlmisc.h>
-#include <atlCtrlx.h>
+#include <atlctrlx.h>
 #include <atldlgs.h>
 #include <atlddx.h>
 #include <atlcrack.h>

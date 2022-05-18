@@ -10,7 +10,7 @@
 #include "myCrypt.h"
 #include "http_parser.h"
 #include "HairTunes.h"
-#include "RAOPDefs.h"
+#include "RaopDefs.h"
 #include "RaopContext.h"
 #include "RaopContextImpl.h"
 #include "Config.h"
@@ -398,7 +398,6 @@ void CHairTunes::Stop()
 void CHairTunes::Flush()
 {
 	ULONG nFlushed	= 0;
-	DWORD dwWait	= WAIT_TIMEOUT;
 
 	ATLTRACE(L"-> CHairTunes::Flush\n");
 

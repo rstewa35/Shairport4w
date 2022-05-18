@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include "resource.h"
 
-#include "changenamedlg.h"
+#include "ChangeNameDlg.h"
 
 ChangeNameDlg::ChangeNameDlg(ATL::CString airportName, ATL::CString password) :
 	m_Name(airportName), m_Password(password), m_VerifyPassword(password)
