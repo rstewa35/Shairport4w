@@ -58,23 +58,22 @@
 
 #include <regex>
 
-#include <GdiPlus.h>
+#include <gdiplus.h>
 
 using namespace Gdiplus;
 
 #include <bcrypt.h>
 
-#include <Strsafe.h>
+#include <strsafe.h>
 
 #include <process.h>
 #include <processthreadsapi.h>
 
-#include <Wincodec.h>
-#include <Mmsystem.h>
+#include <wincodec.h>
+#include <mmsystem.h>
 #include <mmreg.h>
-#include <Mmdeviceapi.h>
-#include <FunctionDiscoveryKeys_devpkey.h>
+#include <mmdeviceapi.h>
+#include <functiondiscoverykeys_devpkey.h>
 
 
-extern	CAppModule				_Module;
-
+extern	CAppModule	_Module;

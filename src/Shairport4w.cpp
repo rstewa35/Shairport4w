@@ -21,7 +21,7 @@
 #include "DmapParser.h"
 #include "Config.h"
 
-#include "aboutdlg.h"
+#include "AboutDlg.h"
 #include "MainDlg.h"
 
 typedef EXECUTION_STATE (WINAPI *_SetThreadExecutionState)(EXECUTION_STATE esFlags);
