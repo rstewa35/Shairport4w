@@ -8,5 +8,5 @@ build:
   project: .\src\Shairport4w.vcxproj
   verbosity: minimal
 artifacts:
-  - path: .\x64\Debug\Shairport4wx64.exe
+  - path: .\src\x64\Release\Shairport4wx64.exe
     name: Shairport4wx64
