@@ -773,8 +773,8 @@ public:
 
 static CRaopServerV6			raop_v6_server;
 static CRaopServerV4			raop_v4_server;
-static CDnsSD_Register			dns_sd_register_server;
-static CDnsSD_BrowseForService	dns_sd_browse_dacp;
+static CDnsSD_Register			*dns_sd_register_server = nullptr;
+static CDnsSD_BrowseForService	*dns_sd_browse_dacp = nullptr;
 
 bool is_streaming()
 {
@@ -816,6 +816,7 @@ bool start_serving()
 	}
 	hw_addr[0] = 0;
 
+	// Start IPv4/IPv6 listening servers
 	if (!raop_v4_server.Run())
 	{
 		_LOG("can't listen on IPv4\n");
@@ -837,6 +838,7 @@ bool start_serving()
 		_LOG("can't listen on IPv6. Don't care!\n");
 	}
 	
+	// Start Bonjour
 	if (!InitBonjour())
 	{
 		raop_v4_server.Cancel();
@@ -853,14 +855,19 @@ bool start_serving()
 		return false;
 	}
 
-	bool bResult = dns_sd_register_server.Start(hw_addr, CW2A(dlgMain->m_strApName, CP_UTF8), dlgMain->m_bNoMetaInfo, dlgMain->m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
+	// Register RAOP service for listening server
+	dns_sd_register_server = new CDnsSD_Register();
+	if (dns_sd_register_server == NULL)
+		return false;
+
+	bool bResult = dns_sd_register_server->Start(hw_addr, CW2A(dlgMain->m_strApName, CP_UTF8), dlgMain->m_bNoMetaInfo, dlgMain->m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
 
 	if (!bResult)
 	{
 		long nTry			= 10;
 		PCSTR strApName	= CW2A(dlgMain->m_strApName, CP_UTF8);
 
-		do
+/*		do
 		{
 			_LOG("Could not register Raop.Tcp Service on Port %lu with dnssd.dll\n", (ULONG)ntohs(raop_v4_server.m_nPort));
 
@@ -868,7 +875,7 @@ bool start_serving()
 			bResult = dns_sd_register_server.Start(hw_addr, strApName, dlgMain->m_bNoMetaInfo, dlgMain->m_strPassword.IsEmpty(), raop_v4_server.m_nPort);
 			nTry--;
 		}
-		while(!bResult && nTry > 0);
+		while(!bResult && nTry > 0);*/
 
 		if (!bResult)
 			::MessageBoxA(NULL, "Could not register Raop.Tcp Service with dnssd.dll", strConfigName.c_str(), MB_ICONERROR);
@@ -877,9 +884,14 @@ bool start_serving()
 	{
 		_LOG("Registered Raop.Tcp Service ok\n");
 
+		// Start DACP browser
 		if (!dlgMain->m_bNoMediaControl)
 		{
-			if (!dns_sd_browse_dacp.Start("_dacp._tcp", dlgMain->m_hWnd, WM_DACP_REG))
+			dns_sd_browse_dacp = new CDnsSD_BrowseForService();
+			if (dns_sd_browse_dacp == NULL)
+				return false;
+
+			if (!dns_sd_browse_dacp->Start("_dacp._tcp", dlgMain->m_hWnd, WM_DACP_REG))
 			{
 				_LOG("Failed to start DACP browser!\n");
 				ATLASSERT(FALSE);
@@ -911,8 +923,19 @@ void stop_serving()
 	raop_v6_server.Cancel();
 	raop_v4_server.Cancel();
 
-	dns_sd_browse_dacp.Stop();
-	dns_sd_register_server.Stop();
+	if (dns_sd_browse_dacp != nullptr)
+	{
+		dns_sd_browse_dacp->Stop();
+
+		delete dns_sd_browse_dacp;
+	}
+
+	if (dns_sd_register_server != nullptr)
+	{
+		dns_sd_register_server->Stop();
+
+		delete dns_sd_register_server;
+	}
 
 	_LOG("stopped ok!\n");
 }
@@ -1064,6 +1087,7 @@ int WINAPI _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstanc
 
 	setlocale(LC_ALL, "");
 
+	// Ensure only one instance is running
     if (mtxAppSessionInstance.Create(NULL, FALSE, ATL::CString(_T("__")) + ATL::CString(CA2CT(strConfigName.c_str())) + ATL::CString(_T("SessionInstanceIsRunning"))))
     {
         while (WaitForSingleObject(mtxAppSessionInstance, 0) != WAIT_OBJECT_0)
@@ -1094,6 +1118,7 @@ int WINAPI _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstanc
 	hRes = _Module.Init(NULL, hInstance);
 	ATLASSERT(SUCCEEDED(hRes));
 
+	// GDI+
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR			gdiplusToken				= 0;
 
