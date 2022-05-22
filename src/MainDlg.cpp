@@ -275,7 +275,7 @@ bool CMainDlg::SendDacpCommand(const char* strCmd, bool bRetryIfFailed /* = true
 		}
 		if (bConnected)
 		{
-			_LOG("succeeded\n");
+			_LOG("Connect to DACP Host succeeded\n");
 
 			CHttp request;
 
@@ -318,7 +318,7 @@ bool CMainDlg::SendDacpCommand(const char* strCmd, bool bRetryIfFailed /* = true
 		}
 		else
 		{
-			_LOG("*failed*\n");
+			_LOG("Connect to DACP Host *failed*\n");
 
 			if (bRetryIfFailed && dacpService->m_Event.IsValid())
 			{
@@ -327,7 +327,7 @@ bool CMainDlg::SendDacpCommand(const char* strCmd, bool bRetryIfFailed /* = true
 				if (dacpService->m_Event.Resolve(this))
 					bResult = SendDacpCommand(strCmd, false);
 				else
-					_LOG("Re-resolve failed!\n");
+					_LOG("DACP Host Re-resolve failed!\n");
 			}
 		}
 	}
