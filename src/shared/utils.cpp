@@ -41,7 +41,7 @@ bool Log(PCSTR pszFormat, ...)
 {
 	if (bLogToConsole || bLogToFile)
 	{
-		size_t	nBuf = 4096; // 32768; //OLE very big !!
+		size_t	nBuf	= 4096; // 32768; //OLE very big !!
 		char*	buf		= (char*)malloc(nBuf);
 		if (!buf)
 			return false;

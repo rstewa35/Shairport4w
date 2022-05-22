@@ -17,7 +17,7 @@
 
 #define EVENT_NAME_SHOW_WINDOW	_T("Shairport4w_ShowMain")
 
-extern	CMutex		mtxAppSessionInstance;
+extern	CMutex			mtxAppSessionInstance;
 extern	std::string		strConfigName;
 
 class IRaopContext;

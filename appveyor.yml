@@ -7,3 +7,6 @@ before_build:
 build:
   project: .\src\Shairport4w.vcxproj
   verbosity: minimal
+artifacts:
+  - path: .\x64\Debug\Shairport4wx64.exe
+    name: Shairport4wx64
