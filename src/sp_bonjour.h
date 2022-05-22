@@ -48,7 +48,7 @@ class CDnsSD_Register : public CDnsSD_Thread
 public:
 	CDnsSD_Register()
 	{
-		m_nErrorCode	= 0;
+		m_nErrorCode	= kDNSServiceErr_NoError;
 		m_hErrorEvent	= ::CreateEventA(NULL, FALSE, FALSE, NULL);
 		ATLASSERT(m_hErrorEvent);
 	}
@@ -104,7 +104,7 @@ public:
 	{
 		m_bRegister			= false;
 		m_pCallback			= NULL;
-		m_nInterfaceIndex	= 0;
+		m_nInterfaceIndex	= kDNSServiceInterfaceIndexAny;
 		m_nPort				= 0;
 		m_bCallbackResult	= false;
 	}
