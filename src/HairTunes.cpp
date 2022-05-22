@@ -294,7 +294,23 @@ bool CHairTunes::Start(std::shared_ptr<CRaopContext> pContext)
     if (!alac)
         return false;
 
-    if (!alac_set_info(alac, (char*)&m_mapFmtp[0]))
+/*	int ret = alac_set_info(alac, (char*)&m_mapFmtp[0]);
+    if (!ret)
+		return false;*/
+
+	alac->setinfo_max_samples_per_frame = m_nFrameSize;
+	alac->setinfo_7a = m_mapFmtp[2];
+	alac->setinfo_sample_size = sample_size;
+	alac->setinfo_rice_historymult = m_mapFmtp[4];
+	alac->setinfo_rice_initialhistory = m_mapFmtp[5];
+	alac->setinfo_rice_kmodifier = m_mapFmtp[6];
+	alac->setinfo_7f = m_mapFmtp[7];
+	alac->setinfo_80 = m_mapFmtp[8];
+	alac->setinfo_82 = m_mapFmtp[9];
+	alac->setinfo_86 = m_mapFmtp[10];
+	alac->setinfo_8a_rate = m_mapFmtp[11];
+
+	if (!alac_allocate_buffers(alac))
 		return false;
 
     m_decoder_info = alac;

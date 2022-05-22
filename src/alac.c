@@ -113,7 +113,7 @@ int alac_set_info(alac_file *alac, char *inputbuffer)
 
     ptr += 4; /* 0 ? */
 
-    alac->setinfo_max_samples_per_frame = *(uint32_t*)ptr; /* buffer size / 2 ? */
+    alac->setinfo_max_samples_per_frame = *(uint32_t*)ptr; /* buffer size / 2 ? */  //read access violation here
     if (!host_bigendian)
         _Swap32(alac->setinfo_max_samples_per_frame);
     ptr += 4;
