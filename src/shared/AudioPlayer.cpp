@@ -249,6 +249,7 @@ bool CWavePlayThread::Start(callback_t callback, size_t nThreshold /*= 16*/)
 {
 	if (IsRunning())
 		return true;
+
 	bool bResult = false;
 
 	m_nThreshold	= nThreshold;
@@ -258,9 +259,19 @@ bool CWavePlayThread::Start(callback_t callback, size_t nThreshold /*= 16*/)
 
 	// create a manual reset event
 	ATLASSERT(!m_hStarted);
-	m_hStarted.Attach(::CreateEvent(NULL, TRUE, FALSE, NULL));
+	HANDLE h = ::CreateEvent(NULL, TRUE, FALSE, NULL);
+	if (h == NULL)
+		return bResult;
+	m_hStarted.Attach(h);
 	
-	CHandle hEvent(::CreateEvent(NULL, TRUE, FALSE, NULL));
+	h = ::CreateEvent(NULL, TRUE, FALSE, NULL);
+	if (h == NULL)
+	{
+		m_hStarted.Close();
+		return bResult;	
+	}
+
+	CHandle hEvent(h);
 
 	if (__super::Start(hEvent))
 	{
