@@ -46,8 +46,6 @@ public:
 
 	int  send(const void* pBuf, int nLen);
 
-	static ULONG GetMACAddress(CTempBuffer<BYTE>& mac, int nIndex = 0);
-
 protected:
     BOOL WaitForSocketState(long nState, DWORD dwTimeout = INFINITE, HANDLE hStopEvent = NULL);
 
@@ -55,6 +53,7 @@ public:
 	SOCKET	    m_sd;
 	BOOL	    m_bBlock;
 	int		    m_nType;
+
 protected:
     CMyMutex    m_mtxSD;
 };

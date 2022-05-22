@@ -494,56 +494,6 @@ int CSocketBase::recvfrom(void* pBuf, int nLen, struct sockaddr* from /* = NULL 
 	return _recv(m_sd, pBuf, nLen, true, from, fromlen);
 }
 
-ULONG CSocketBase::GetMACAddress(CTempBuffer<BYTE>& mac, int nIndex /*= 0*/)
-{
-	typedef  DWORD(WINAPI *__GetAdaptersInfo)(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen);
-
-	__GetAdaptersInfo		pGetAdaptersInfo = NULL;
-
-	HMODULE hMod = LoadLibraryA("Iphlpapi.dll");
-
-	if (hMod)
-	{
-		pGetAdaptersInfo = (__GetAdaptersInfo)GetProcAddress(hMod, "GetAdaptersInfo");
-
-		if (pGetAdaptersInfo)
-		{
-			PIP_ADAPTER_INFO	pAdapterInfo = NULL;
-			ULONG				ulOutBufLen = 0;
-
-			if (pGetAdaptersInfo(pAdapterInfo, &ulOutBufLen) != NO_ERROR)
-			{
-				pAdapterInfo = (IP_ADAPTER_INFO*)malloc(ulOutBufLen);
-			}
-
-			if (pGetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == NO_ERROR)
-			{
-				PIP_ADAPTER_INFO pAdapter = pAdapterInfo;
-
-				while (pAdapter)
-				{
-					if (pAdapter->AddressLength == 6)
-					{
-						if (nIndex-- == 0)
-						{
-							mac.Reallocate(6);
-							memcpy(mac, pAdapter->Address, 6);
-
-							FreeLibrary(hMod);
-							return 6;
-						}
-					}
-					pAdapter = pAdapter->Next;
-				}
-			}
-			if (pAdapterInfo)
-				free(pAdapterInfo);
-		}
-		FreeLibrary(hMod);
-	}
-	return 0;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // CNetworkServer
 
