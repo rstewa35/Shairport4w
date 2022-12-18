@@ -48,19 +48,19 @@ public:
 		if (_m_bmInfo)
 			delete _m_bmInfo;
 	}
-	void Lock(bool bExclusive)
+	void Lock(bool bExclusive) override
 	{
 		m_mtx.Lock(bExclusive);
 	}
-	void Lock()
+	void Lock() override
 	{
 		m_mtx.Lock(true);
 	}
-	void Unlock()
+	void Unlock() override
 	{
 		m_mtx.Unlock();
 	}
-	bool TryLock()
+	bool TryLock() override
 	{
 		return m_mtx.TryLock() ? true : false;
 	}
@@ -86,7 +86,7 @@ public:
 		}
 		Unlock();
 	}
-	void ResetSongInfos()
+	void ResetSongInfos() override
 	{
 		Lock();
 
@@ -96,7 +96,7 @@ public:
 
 		Unlock();
 	}
-	time_t GetTimeStamp()
+	time_t GetTimeStamp() override
 	{
 		Lock();
 		time_t tResult = _m_nTimeStamp;
@@ -104,13 +104,13 @@ public:
 
 		return tResult;
 	}
-	void PutTimeStamp(time_t tValue)
+	void PutTimeStamp(time_t tValue) override
 	{
 		Lock();
 		_m_nTimeStamp = tValue;
 		Unlock();
 	}
-	time_t GetTimeTotal()
+	time_t GetTimeTotal() override
 	{
 		Lock();
 		time_t tResult = _m_nTimeTotal;
@@ -118,13 +118,13 @@ public:
 
 		return tResult;
 	}
-	void PutTimeTotal(time_t tValue)
+	void PutTimeTotal(time_t tValue) override
 	{
 		Lock();
 		_m_nTimeTotal = tValue;
 		Unlock();
 	}
-	time_t GetTimeCurrentPos()
+	time_t GetTimeCurrentPos() override
 	{
 		Lock();
 		time_t tResult = _m_nTimeCurrentPos;
@@ -132,13 +132,13 @@ public:
 
 		return tResult;
 	}
-	void PutTimeCurrentPos(time_t tValue)
+	void PutTimeCurrentPos(time_t tValue) override
 	{
 		Lock();
 		_m_nTimeCurrentPos = tValue;
 		Unlock();
 	}
-	long GetDurHours()
+	long GetDurHours() override
 	{
 		Lock();
 		long nResult = _m_nDurHours;
@@ -146,13 +146,13 @@ public:
 
 		return nResult;
 	}
-	void PutDurHours(long nValue)
+	void PutDurHours(long nValue) override
 	{
 		Lock();
 		_m_nDurHours = nValue;
 		Unlock();
 	}
-	long GetDurMins()
+	long GetDurMins() override
 	{
 		Lock();
 		long nResult = _m_nDurMins;
@@ -160,13 +160,13 @@ public:
 
 		return nResult;
 	}
-	void PutDurMins(long nValue)
+	void PutDurMins(long nValue) override
 	{
 		Lock();
 		_m_nDurMins = nValue;
 		Unlock();
 	}
-	long GetDurSecs()
+	long GetDurSecs() override
 	{
 		Lock();
 		long nResult = _m_nDurSecs;
@@ -174,7 +174,7 @@ public:
 
 		return nResult;
 	}
-	void PutDurSecs(long nValue)
+	void PutDurSecs(long nValue) override
 	{
 		Lock();
 		_m_nDurSecs = nValue;
@@ -188,7 +188,7 @@ public:
 
 		return strResult;
 	}
-	long	GetSongalbumCount()
+	long	GetSongalbumCount() override
 	{
 		Lock();
 		long nResult = (long)_m_str_daap_songalbum.GetLength();
@@ -210,7 +210,7 @@ public:
 
 		return strResult;
 	}
-	long	GetSongartistCount()
+	long	GetSongartistCount() override
 	{
 		Lock();
 		long nResult = (long)_m_str_daap_songartist.GetLength();
@@ -232,7 +232,7 @@ public:
 
 		return strResult;
 	}
-	long	GetSongtrackCount()
+	long	GetSongtrackCount() override
 	{
 		Lock();
 		long nResult = (long)_m_str_daap_trackname.GetLength();
@@ -246,45 +246,45 @@ public:
 		_m_str_daap_trackname = strValue;
 		Unlock();
 	}
-	void GetSongalbum(PWSTR pBuf, ULONG nMax)
+	void GetSongalbum(PWSTR pBuf, ULONG nMax) override
 	{
 		Lock();
 		wcsncpy_s(pBuf, nMax, _m_str_daap_songalbum, _TRUNCATE);
 		Unlock();
 	}
-	void PutSongalbum(PCWSTR strValue)
+	void PutSongalbum(PCWSTR strValue) override
 	{
 		if (strValue)
 			PutSongalbum(ATL::CString(strValue));
 	}
-	void GetSongartist(PWSTR pBuf, ULONG nMax)
+	void GetSongartist(PWSTR pBuf, ULONG nMax) override
 	{
 		Lock();
 		wcsncpy_s(pBuf, nMax, _m_str_daap_songartist, _TRUNCATE);
 		Unlock();
 	}
-	void PutSongartist(PCWSTR strValue)
+	void PutSongartist(PCWSTR strValue) override
 	{
 		if (strValue)
 			PutSongartist(ATL::CString(strValue));
 	}
-	void GetSongtrack(PWSTR pBuf, ULONG nMax)
+	void GetSongtrack(PWSTR pBuf, ULONG nMax) override
 	{
 		Lock();
 		wcsncpy_s(pBuf, nMax, _m_str_daap_trackname, _TRUNCATE);
 		Unlock();
 	}
-	void PutSongtrack(PCWSTR strValue)
+	void PutSongtrack(PCWSTR strValue) override
 	{
 		if (strValue)
 			PutSongtrack(ATL::CString(strValue));
 	}
-	Bitmap* GetBitmap()
+	Bitmap* GetBitmap() override
 	{
 		// you need to lock yourself
 		return _m_bmInfo;
 	}
-	void PutBitmap(Bitmap* bmValue)
+	void PutBitmap(Bitmap* bmValue) override
 	{
 		ATLASSERT(_m_bmInfo == NULL);
 
@@ -295,15 +295,15 @@ public:
 			m_nBitmapBytes = 0;
 		Unlock();
 	}
-	BYTE*	GetBitmapBytes()
+	BYTE*	GetBitmapBytes() override
 	{
 		return m_binBitmap;
 	}
-	long	GetBitmapByteCount()
+	long	GetBitmapByteCount() override
 	{
 		return m_nBitmapBytes;
 	}
-	bool GetHICON(HICON* phIcon)
+	bool GetHICON(HICON* phIcon) override
 	{
 		bool bResult = false;
 
@@ -315,7 +315,7 @@ public:
 
 		return bResult;
 	}
-	void DeleteImage()
+	void DeleteImage() override
 	{
 		Lock();
 
@@ -343,19 +343,19 @@ public:
 			Unlock();
 		}
 	}
-	unsigned long long&		GetRtpStart()
+	unsigned long long&		GetRtpStart() override
 	{
 		return m_rtpStart;
 	}
-	unsigned long long&		GetRtpCur()
+	unsigned long long&		GetRtpCur() override
 	{
 		return m_rtpCur;
 	}
-	unsigned long long&		GetRtpEnd()
+	unsigned long long&		GetRtpEnd() override
 	{
 		return m_rtpEnd;
 	}
-	double&					GetFreq()
+	double&					GetFreq() override
 	{
 		return m_lfFreq;
 	}
