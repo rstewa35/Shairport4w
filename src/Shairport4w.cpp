@@ -117,6 +117,12 @@ static bool digest_ok(std::shared_ptr<CRaopContext>& pRaopContext)
 class CRaopServer : public CNetworkServer, protected CDmapParser
 {
 protected:
+	CRaopServer(const std::shared_ptr<CHairTunes::Volume>& volume)
+		: m_Volume(volume)
+	{
+		ATLASSERT(m_Volume);
+	}
+
 	// Dmap Parser Callbacks
 	virtual void on_string(void* ctx, const char *code, const char *name, const char *buf, size_t len)  
 	{
@@ -178,7 +184,7 @@ protected:
 
 		if (pRaopContext)
 		{
-			pRaopContext->m_pDecoder = std::make_shared<CHairTunes>();
+			pRaopContext->m_pDecoder = std::make_shared<CHairTunes>(m_Volume);
 			ATLASSERT(pRaopContext->m_pDecoder);			
 			
 			c_mtxConnection.Lock();
@@ -597,7 +603,7 @@ protected:
 
 								if (i != mapKeyValue.end())
 								{
-									pRaopContext->m_pDecoder->SetVolume(atof(i->second.c_str()));
+									m_Volume->SetVolume(atof(i->second.c_str()));
 								}
 								else
 								{
@@ -728,12 +734,18 @@ protected:
 			c_mtxConnection.Unlock();
 	}
 protected:
-	bool						m_bV4;
+	const std::shared_ptr<CHairTunes::Volume>	m_Volume;
+	bool										m_bV4;
 };
 
 class CRaopServerV6 : public CRaopServer
 {
 public:
+	CRaopServerV6(const std::shared_ptr<CHairTunes::Volume>& volume)
+		: CRaopServer(volume)
+	{
+	}
+
 	BOOL Run(int nPort)
 	{
 		m_bV4 = false;
@@ -753,6 +765,11 @@ public:
 class CRaopServerV4 : public CRaopServer
 {
 public:
+	CRaopServerV4(const std::shared_ptr<CHairTunes::Volume>& volume)
+		: CRaopServer(volume)
+	{
+	}
+
 	BOOL Run()
 	{
 		m_bV4 = true;
@@ -771,8 +788,9 @@ public:
 	}
 };
 
-static CRaopServerV6			raop_v6_server;
-static CRaopServerV4			raop_v4_server;
+const std::shared_ptr<CHairTunes::Volume> volume{ std::make_shared<CHairTunes::Volume>() };
+static CRaopServerV6			raop_v6_server(volume);
+static CRaopServerV4			raop_v4_server(volume);
 static CDnsSD_Register			*dns_sd_register_server = nullptr;
 static CDnsSD_BrowseForService	*dns_sd_browse_dacp = nullptr;
 

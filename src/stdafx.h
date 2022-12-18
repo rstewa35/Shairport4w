@@ -52,6 +52,7 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
+#include <atomic>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
