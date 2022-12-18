@@ -21,6 +21,7 @@ packages
 Debug
 Release
 x64
+ARM64
 src/Shairport4w.vcxproj.user
 
 *.aps
